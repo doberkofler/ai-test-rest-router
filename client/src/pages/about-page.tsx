@@ -72,6 +72,21 @@ export const AboutPage: React.FC = () => {
 					)
 				)}
 			</section>
+
+			<section>
+				<h2>Session Information</h2>
+				{isLoading ? (
+					<p>Loading session info...</p>
+				) : (
+					serverInfo?.user && (
+						<ul>
+							<li>User Code: {serverInfo.user.username}</li>
+							<li>Full Name: {serverInfo.user.fullName}</li>
+							<li>Session Created: {new Date(serverInfo.user.loginTimestamp).toLocaleString()}</li>
+						</ul>
+					)
+				)}
+			</section>
 		</div>
 	);
 };
