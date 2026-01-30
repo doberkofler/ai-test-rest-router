@@ -1,2 +1,0 @@
-{"timestamp":"2026-01-30T10:09:40.359Z","level":"access","context":"http","message":"GET /api/info","metadata":{"method":"GET","url":"/api/info","status":401,"durationMs":0,"user":"anonymous"}}
-{"timestamp":"2026-01-30T10:09:40.378Z","level":"access","context":"test","message":"msg1"}
