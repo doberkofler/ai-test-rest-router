@@ -3,4 +3,6 @@
 **/node_modules/
 **/coverage/
 **/__screenshots__/
+playwright-report/
+test-results/
 .vscode/
