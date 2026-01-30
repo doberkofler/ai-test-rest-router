@@ -1,43 +1,16 @@
 {
+	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
-		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-		"target": "ES2022",
-		"useDefineForClassFields": true,
-		"lib": ["ES2022", "DOM", "DOM.Iterable"],
-		"module": "ESNext",
-		"types": ["vite/client", "vitest/globals"],
-		"skipLibCheck": true,
-
-		/* Bundler mode */
-		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": true,
-		"verbatimModuleSyntax": true,
-		"moduleDetection": "force",
-		"noEmit": true,
+		"composite": true,
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"jsx": "react-jsx",
+		"types": ["vite/client", "vitest/globals"],
+		"noEmit": true,
 		"baseUrl": ".",
+		"allowImportingTsExtensions": true,
 		"paths": {
-			"@shared/*": ["./src/shared/*"]
-		},
-
-		/* Strict Linting */
-		"strict": true,
-		"noImplicitAny": true,
-		"strictNullChecks": true,
-		"strictFunctionTypes": true,
-		"strictBindCallApply": true,
-		"strictPropertyInitialization": true,
-		"noImplicitThis": true,
-		"useUnknownInCatchVariables": true,
-		"alwaysStrict": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noImplicitReturns": true,
-		"noFallthroughCasesInSwitch": true,
-		"noUncheckedIndexedAccess": true,
-		"noImplicitOverride": true,
-		"noPropertyAccessFromIndexSignature": true,
-		"noUncheckedSideEffectImports": true
+			"@shared/logic": ["../shared/schemas.ts"]
+		}
 	},
-	"include": ["src"]
+	"include": ["src", "../shared/schemas.ts"]
 }

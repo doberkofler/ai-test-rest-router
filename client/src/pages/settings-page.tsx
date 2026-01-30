@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useQuery, useMutation, useQueryClient} from '@tanstack/react-query';
-import {OptionsSchema} from '@shared/schemas';
-import type {Options} from '@shared/schemas';
+import {OptionsSchema} from '@shared/logic';
+import type {Options} from '@shared/logic';
 import {useThemeContext} from '../contexts/theme-provider';
 import {
 	Typography,

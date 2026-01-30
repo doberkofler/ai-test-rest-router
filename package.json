@@ -1,0 +1,13 @@
+{
+  "name": "ai-test-rest-router",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
+  "scripts": {
+    "lint": "npx eslint .",
+    "test": "npm run test --workspaces"
+  }
+}

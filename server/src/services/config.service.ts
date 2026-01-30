@@ -1,6 +1,6 @@
 import {readFile, writeFile} from 'node:fs/promises';
-import {OptionsSchema, UserSchema} from '../shared/schemas.ts';
-import type {Options, User} from '../shared/schemas.ts';
+import {OptionsSchema, UserSchema} from '@shared/logic';
+import type {Options, User} from '@shared/logic';
 
 /**
  * Service for managing application configuration and user data.

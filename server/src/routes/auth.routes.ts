@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {LoginSchema} from '../shared/schemas.ts';
+import {LoginSchema} from '@shared/logic';
 import {configService} from '../services/config.service.ts';
 import {sessionService} from '../services/session.service.ts';
 

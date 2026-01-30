@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
 import {AuthContext} from './auth-context';
-import {UserSchema} from '../shared/schemas';
+import {UserSchema} from '@shared/logic';
 import type {UserState} from './auth-context';
 
 const UserStateSchema = UserSchema.nullable();

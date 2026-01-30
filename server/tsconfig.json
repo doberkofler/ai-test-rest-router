@@ -1,35 +1,15 @@
 {
+	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
-		"target": "ES2022",
+		"composite": true,
 		"module": "NodeNext",
 		"moduleResolution": "NodeNext",
-		"outDir": "./dist",
-		"rootDir": "./src",
-		"strict": true,
-		"noImplicitAny": true,
-		"strictNullChecks": true,
-		"strictFunctionTypes": true,
-		"strictBindCallApply": true,
-		"strictPropertyInitialization": true,
-		"noImplicitThis": true,
-		"useUnknownInCatchVariables": true,
-		"alwaysStrict": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noImplicitReturns": true,
-		"noFallthroughCasesInSwitch": true,
-		"noUncheckedIndexedAccess": true,
-		"noImplicitOverride": true,
-		"noPropertyAccessFromIndexSignature": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
-		"allowImportingTsExtensions": true,
 		"noEmit": true,
-		"baseUrl": "./src",
+		"baseUrl": ".",
+		"allowImportingTsExtensions": true,
 		"paths": {
-			"shared/*": ["./shared/*"]
+			"@shared/logic": ["../shared/schemas.ts"]
 		}
 	},
-	"include": ["src/**/*"]
+	"include": ["src/**/*", "../shared/schemas.ts"]
 }

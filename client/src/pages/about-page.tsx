@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useQuery} from '@tanstack/react-query';
-import {ServerInfoSchema} from '@shared/schemas';
-import type {ServerInfo} from '@shared/schemas';
+import {ServerInfoSchema} from '@shared/logic';
+import type {ServerInfo} from '@shared/logic';
 import {Typography, Box, Paper, List, ListItem, ListItemText, Divider, Alert, CircularProgress} from '@mui/material';
 
 /**

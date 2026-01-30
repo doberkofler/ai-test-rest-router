@@ -2,23 +2,25 @@
 
 ## 🛠 Build, Lint, & Test Commands
 
-### Root Workspace
-- **Lint All**: `npm run lint` (in `client` and `server`)
-- **Type Check**: `npm run lint` (runs `tsc` or `tsc -b`)
+### Root Workspace (NPM Workspaces)
+- **Install All**: `npm install`
+- **Lint All**: `npm run lint` (runs `lint` in all workspaces)
+- **Test All**: `npm run test` (runs `test` in all workspaces)
 
 ### Frontend (client/)
-- **Dev Server**: `cd client && npm run dev`
-- **Build**: `cd client && npm run build`
-- **Test (All)**: `cd client && npm run test`
-- **Test (Single File)**: `cd client && npx vitest run src/pages/login-page.test.tsx`
-- **Lint**: `cd client && npm run lint`
+- **Dev Server**: `npm run dev -w client`
+- **Build**: `npm run build -w client`
+- **Test**: `npm run test -w client`
+- **Single Test**: `cd client && npx vitest run src/pages/login-page.test.tsx`
 
 ### Backend (server/)
-- **Dev (Watch)**: `cd server && npm run dev`
-- **Start**: `cd server && npm run start`
-- **Test (All)**: `cd server && npm run test`
-- **Test (Single File)**: `cd server && node --test src/auth.test.ts`
-- **Lint**: `cd server && npm run lint`
+- **Dev**: `npm run dev -w server`
+- **Start**: `npm run start -w server`
+- **Test**: `npm run test -w server`
+- **Single Test**: `cd server && node --test src/auth.test.ts`
+
+### Shared (@shared/logic)
+- **Lint**: `npm run lint -w shared`
 
 ---
 
@@ -42,37 +44,35 @@
   - Components/Classes: `PascalCase`
   - Variables/Functions/Files: `kebab-case` for files, `camelCase` for logic.
   - Constants: `SCREAMING_SNAKE_CASE` for global constants.
-- **Types vs Interfaces**: Prefer `type` for unions/aliases, `interface` for object structures (consistent with existing `AuthProviderProps`, `LoginData`).
+- **Types vs Interfaces**: Prefer `type` for unions/aliases, `interface` for object structures.
 - **Null Safety**: Use strict null checks. Prefer `null` over `undefined` for state.
 - **Type Assertions (`as`)**:
   - **Restrict Usage**: Avoid `as` assertions. Never use them for API responses, `JSON.parse`, or external data.
-  - **Zod Validation**: Use `zod` schemas to parse and validate dynamic data instead of asserting types.
-  - **Mandatory Comments**: If `as` is unavoidable (e.g., DOM elements in tests, library type narrowing), add a comment explaining why it is absolutely needed.
-    - Example: `// WHY: Testing-library returns HTMLElement; narrowing to HTMLInputElement for .value access.`
+  - **Zod Validation**: Use `zod` schemas to parse and validate dynamic data.
+  - **Mandatory Comments**: If `as` is unavoidable, add a comment explaining why (e.g., `// WHY: Testing-library narrowing`).
 
-### 3. Imports
-- Use named exports.
-- Import types using `import type { ... }`.
-- Follow local directory structure: `../../shared/schemas.ts` or local paths.
+### 3. Imports & Workspaces
+- **Shared Code**: Import from `@shared/logic`.
+- **Relative Paths**: Avoid deeply nested relative paths (e.g., `../../../`). Use workspace packages.
+- **Type Imports**: Use `import type { ... }`.
 
 ### 4. Error Handling
+- **Centralized Backend**: Use the global error middleware in `server/src/app.ts`.
+- **Frontend resilience**: Use the `ErrorBoundary` component.
 - **Throw Early**: Throw on all error conditions.
-- **Catching**: Use `unknown` in catch blocks and type guard (e.g., `error instanceof Error`).
-- **Hooks**: In React, use `onError` in TanStack Query or standard try/catch in effects.
 
-### 5. Frontend (React 19)
+### 5. Frontend (React 19 + MUI)
+- **Styling**: Use MUI components and `sx` props. Avoid raw CSS/SCSS where possible.
 - **Data Fetching**: Use `@tanstack/react-query`.
-- **State**: Use Context API for global state (Auth, Theme).
-- **Styling**: Inline styles or CSS-in-JS (mimic `main-layout.tsx`).
+- **Theme**: Use `ThemeContext` and MUI's `ThemeProvider`.
 
 ### 6. Backend (Express 5.2 / Node 24)
-- **Runtime**: Native TypeScript execution via Node 24 (no transpiler).
-- **Testing**: Use Node's native test runner (`node --test`) with `supertest`.
-- **Middleware**: Use `helmet`, `cors`, `cookie-parser`, and `morgan`.
+- **Runtime**: Native TypeScript execution.
+- **Middleware**: `helmet`, `cors`, `cookie-parser`, `morgan`.
+- **Session**: Memory-based `SessionService` with background cleanup.
 
 ---
 
 ## 🔍 Validation Protocol
 1. **Ambiguity**: Stop and ask if requirements are unclear.
-2. **Docs**: Only ISO, RFC, W3C, ECMA, and official vendor docs are authoritative.
-3. **Quality**: Ensure at least 90% test coverage for new features.
+2. **Quality**: Ensure at least 90% test coverage for new features.

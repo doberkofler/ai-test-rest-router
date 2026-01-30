@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import type {Response} from 'express';
-import {OptionsSchema} from '../shared/schemas.ts';
+import {OptionsSchema} from '@shared/logic';
 import {configService} from '../services/config.service.ts';
 import {authGuard} from '../middleware/auth.middleware.ts';
 import type {AuthRequest} from '../middleware/auth.middleware.ts';
