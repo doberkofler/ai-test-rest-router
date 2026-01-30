@@ -1,7 +1,7 @@
 import {describe, it, expect, vi} from 'vitest';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
-import {MainLayout} from '../layouts/main-layout';
-import {TestWrapper} from '../test/test-wrapper';
+import {MainLayout} from '@client/layouts/main-layout';
+import {TestWrapper} from '@client/test/test-wrapper';
 import {MemoryRouter} from 'react-router-dom';
 
 describe('MainLayout', () => {

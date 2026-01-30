@@ -72,6 +72,14 @@ export default tseslint.config(
 			'import-x/no-named-as-default-member': 'off',
 			'@typescript-eslint/no-unnecessary-type-assertion': 'off',
 			'@typescript-eslint/no-unnecessary-condition': 'off',
+			'@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+			'import-x/extensions': [
+				'error',
+				'always',
+				{
+					ignorePackages: true,
+				},
+			],
 		},
 	},
 	{

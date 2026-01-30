@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {LoginSchema} from '@shared/logic';
+import {LoginSchema, SHARED_CONSTANTS} from '@shared/logic';
 import {configService} from '../services/config.service.ts';
 import {sessionService} from '../services/session.service.ts';
 
@@ -15,7 +15,7 @@ router.post('/login', function login(req, res) {
 			const sid = sessionService.createSession(user.username, user.fullName);
 
 			const isProduction = process.env['NODE_ENV'] === 'production';
-			res.cookie('sid', sid, {
+			res.cookie(SHARED_CONSTANTS.COOKIE_NAME, sid, {
 				httpOnly: true,
 				secure: isProduction,
 				sameSite: isProduction ? 'strict' : 'lax',
@@ -35,11 +35,11 @@ router.post('/login', function login(req, res) {
 });
 
 router.post('/logout', function logout(req, res) {
-	const sid = (req.cookies as Record<string, string>)['sid'];
+	const sid = (req.cookies as Record<string, string>)[SHARED_CONSTANTS.COOKIE_NAME];
 	if (sid) {
 		sessionService.deleteSession(sid);
 	}
-	res.clearCookie('sid');
+	res.clearCookie(SHARED_CONSTANTS.COOKIE_NAME);
 	res.json({status: 'ok'});
 });
 

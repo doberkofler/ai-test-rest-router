@@ -1,7 +1,8 @@
 import {createApp} from './app.ts';
 import {configService} from './services/config.service.ts';
+import {env} from './env.ts';
 
-const port = 3001;
+const port = env.PORT;
 
 try {
 	const app = await createApp();

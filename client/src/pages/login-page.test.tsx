@@ -1,7 +1,7 @@
 import {describe, it, expect, vi} from 'vitest';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
-import {LoginPage} from '../pages/login-page';
-import {TestWrapper} from '../test/test-wrapper';
+import {LoginPage} from '@client/pages/login-page';
+import {TestWrapper} from '@client/test/test-wrapper';
 import {MemoryRouter, Routes, Route} from 'react-router-dom';
 
 describe('LoginPage', () => {

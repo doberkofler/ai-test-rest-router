@@ -9,7 +9,8 @@ export default defineConfig({
 	plugins: [react()],
 	resolve: {
 		alias: {
-			'@shared/logic': path.resolve(__dirname, '../shared/schemas.ts'),
+			'@shared/logic': path.resolve(__dirname, '../shared/src/index.ts'),
+			'@client': path.resolve(__dirname, './src'),
 		},
 	},
 	define: {

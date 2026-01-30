@@ -25,6 +25,14 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedIndexedAccess": true,
 		"noImplicitOverride": true,
-		"noPropertyAccessFromIndexSignature": true
+		"noPropertyAccessFromIndexSignature": true,
+		"allowImportingTsExtensions": true,
+		"noEmit": true,
+		"baseUrl": ".",
+		"paths": {
+			"@shared/logic": ["shared/src/index.ts"],
+			"@client/*": ["client/src/*"],
+			"@server/*": ["server/src/*"]
+		}
 	}
 }

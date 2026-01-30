@@ -1,10 +1,10 @@
 import {describe, it, expect, vi} from 'vitest';
 import {render, screen, waitFor} from '@testing-library/react';
-import {AppContent} from './app';
+import {AppContent} from '@client/app';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import {useAuth} from './contexts/auth-context';
-import {AuthProvider} from './contexts/auth-provider';
-import {ThemeProvider} from './contexts/theme-provider';
+import {useAuth} from '@client/contexts/auth-context';
+import {AuthProvider} from '@client/contexts/auth-provider';
+import {ThemeProvider} from '@client/contexts/theme-provider';
 import {MemoryRouter} from 'react-router-dom';
 
 const queryClient = new QueryClient({

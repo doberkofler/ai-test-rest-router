@@ -3,7 +3,7 @@ import {useQuery} from '@tanstack/react-query';
 import {ServerInfoSchema} from '@shared/logic';
 import type {ServerInfo} from '@shared/logic';
 import {Typography, Box, Paper, List, ListItem, ListItemText, Divider, Alert, CircularProgress} from '@mui/material';
-import {apiClient} from '../services/api-client';
+import {apiClient} from '@client/services/api-client.ts';
 
 /**
  * Fetches server information using the centralized ApiClient.

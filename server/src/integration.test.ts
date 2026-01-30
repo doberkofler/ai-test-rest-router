@@ -3,6 +3,10 @@ import request from 'supertest';
 import {createApp} from './app.ts';
 import {configService} from './services/config.service.ts';
 import {sessionService} from './services/session.service.ts';
+import {SHARED_CONSTANTS} from '@shared/logic';
+
+const API_BASE = SHARED_CONSTANTS.API_BASE;
+const COOKIE_NAME = SHARED_CONSTANTS.COOKIE_NAME;
 
 describe('Modular Server API - Detailed', () => {
 	beforeEach(() => {
@@ -14,104 +18,104 @@ describe('Modular Server API - Detailed', () => {
 		vi.restoreAllMocks();
 	});
 
-	it('GET /api/health returns 200 and status ok', async () => {
+	it(`GET ${API_BASE}/health returns 200 and status ok`, async () => {
 		const app = await createApp();
-		const response = await request(app).get('/api/health');
+		const response = await request(app).get(`${API_BASE}/health`);
 		expect(response.status).toBe(200);
 		expect(response.body).toEqual({status: 'ok'});
 	});
 
-	it('POST /api/auth/login with valid credentials', async () => {
+	it(`POST ${API_BASE}/auth/login with valid credentials`, async () => {
 		const app = await createApp();
-		const response = await request(app).post('/api/auth/login').send({username: 'admin', password: 'secret'});
+		const response = await request(app).post(`${API_BASE}/auth/login`).send({username: 'admin', password: 'secret'});
 
 		expect(response.status).toBe(200);
 		expect(response.headers['set-cookie']).toBeDefined();
 		expect((response.body as {username: string}).username).toBe('admin');
 	});
 
-	it('POST /api/auth/login with invalid credentials', async () => {
+	it(`POST ${API_BASE}/auth/login with invalid credentials`, async () => {
 		const app = await createApp();
-		const response = await request(app).post('/api/auth/login').send({username: 'admin', password: 'wrong'});
+		const response = await request(app).post(`${API_BASE}/auth/login`).send({username: 'admin', password: 'wrong'});
 
 		expect(response.status).toBe(401);
 	});
 
-	it('POST /api/auth/login handles bad payload', async () => {
+	it(`POST ${API_BASE}/auth/login handles bad payload`, async () => {
 		const app = await createApp();
-		const response = await request(app).post('/api/auth/login').send({invalid: 'payload'});
+		const response = await request(app).post(`${API_BASE}/auth/login`).send({invalid: 'payload'});
 
 		expect(response.status).toBe(400);
 	});
 
-	it('GET /api/info requires authentication', async () => {
+	it(`GET ${API_BASE}/info requires authentication`, async () => {
 		const app = await createApp();
-		const response = await request(app).get('/api/info');
+		const response = await request(app).get(`${API_BASE}/info`);
 		expect(response.status).toBe(401);
 	});
 
-	it('GET /api/info handles invalid session', async () => {
+	it(`GET ${API_BASE}/info handles invalid session`, async () => {
 		const app = await createApp();
-		const response = await request(app).get('/api/info').set('Cookie', ['sid=invalid-id']);
+		const response = await request(app).get(`${API_BASE}/info`).set('Cookie', [`${COOKIE_NAME}=invalid-id`]);
 		expect(response.status).toBe(401);
 	});
 
-	it('GET /api/info with valid session', async () => {
+	it(`GET ${API_BASE}/info with valid session`, async () => {
 		const app = await createApp();
-		const loginRes = await request(app).post('/api/auth/login').send({username: 'admin', password: 'secret'});
+		const loginRes = await request(app).post(`${API_BASE}/auth/login`).send({username: 'admin', password: 'secret'});
 
 		const cookie = loginRes.get('Set-Cookie') ?? [];
-		const response = await request(app).get('/api/info').set('Cookie', cookie);
+		const response = await request(app).get(`${API_BASE}/info`).set('Cookie', cookie);
 
 		expect(response.status).toBe(200);
 		expect((response.body as {user: {username: string}}).user.username).toBe('admin');
 	});
 
-	it('GET /api/info handles session timeout', async () => {
+	it(`GET ${API_BASE}/info handles session timeout`, async () => {
 		const app = await createApp();
-		const loginRes = await request(app).post('/api/auth/login').send({username: 'admin', password: 'secret'});
+		const loginRes = await request(app).post(`${API_BASE}/auth/login`).send({username: 'admin', password: 'secret'});
 
 		const cookie = loginRes.get('Set-Cookie') ?? [];
 
 		// Advance time beyond 1 hour
 		vi.advanceTimersByTime(3_600_001);
 
-		const response = await request(app).get('/api/info').set('Cookie', cookie);
+		const response = await request(app).get(`${API_BASE}/info`).set('Cookie', cookie);
 
 		expect(response.status).toBe(401);
 		expect((response.body as {error: string}).error).toBe('Session timed out');
 	});
 
-	it('POST /api/options updates timeout', async () => {
+	it(`POST ${API_BASE}/options updates timeout`, async () => {
 		const app = await createApp();
-		const loginRes = await request(app).post('/api/auth/login').send({username: 'admin', password: 'secret'});
+		const loginRes = await request(app).post(`${API_BASE}/auth/login`).send({username: 'admin', password: 'secret'});
 
 		const cookie = loginRes.get('Set-Cookie') ?? [];
-		const response = await request(app).post('/api/options').set('Cookie', cookie).send({sessionTimeoutMinutes: 120});
+		const response = await request(app).post(`${API_BASE}/options`).set('Cookie', cookie).send({sessionTimeoutMinutes: 120});
 
 		expect(response.status).toBe(200);
 		expect(response.body).toEqual({sessionTimeoutMinutes: 120});
 		expect(configService.getOptions().sessionTimeoutMinutes).toBe(120);
 	});
 
-	it('POST /api/options handles invalid payload', async () => {
+	it(`POST ${API_BASE}/options handles invalid payload`, async () => {
 		const app = await createApp();
-		const loginRes = await request(app).post('/api/auth/login').send({username: 'admin', password: 'secret'});
+		const loginRes = await request(app).post(`${API_BASE}/auth/login`).send({username: 'admin', password: 'secret'});
 
 		const cookie = loginRes.get('Set-Cookie') ?? [];
-		const response = await request(app).post('/api/options').set('Cookie', cookie).send({sessionTimeoutMinutes: -1}); // Too small
+		const response = await request(app).post(`${API_BASE}/options`).set('Cookie', cookie).send({sessionTimeoutMinutes: -1}); // Too small
 
 		expect(response.status).toBe(400);
 	});
 
-	it('POST /api/auth/logout invalidates session', async () => {
+	it(`POST ${API_BASE}/auth/logout invalidates session`, async () => {
 		const app = await createApp();
-		const loginRes = await request(app).post('/api/auth/login').send({username: 'admin', password: 'secret'});
+		const loginRes = await request(app).post(`${API_BASE}/auth/login`).send({username: 'admin', password: 'secret'});
 
 		const cookie = loginRes.get('Set-Cookie') ?? [];
-		await request(app).post('/api/auth/logout').set('Cookie', cookie);
+		await request(app).post(`${API_BASE}/auth/logout`).set('Cookie', cookie);
 
-		const response = await request(app).get('/api/info').set('Cookie', cookie);
+		const response = await request(app).get(`${API_BASE}/info`).set('Cookie', cookie);
 		expect(response.status).toBe(401);
 	});
 

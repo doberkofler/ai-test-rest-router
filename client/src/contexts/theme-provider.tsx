@@ -1,19 +1,19 @@
 import React, {createContext, useContext, useMemo} from 'react';
 import {ThemeProvider as MuiThemeProvider, createTheme, CssBaseline, useMediaQuery} from '@mui/material';
-import {useTheme} from '../hooks/use-theme';
+import {useTheme} from '@client/hooks/use-theme.ts';
 import type {ReactNode} from 'react';
 
-interface ThemeContextType {
+type ThemeContextType = {
 	theme: 'light' | 'dark' | 'system';
 	setTheme: (theme: 'light' | 'dark' | 'system') => void;
-}
+};
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-interface ThemeProviderProps {
+type ThemeProviderProps = {
 	/** Children to be rendered. */
 	children: ReactNode;
-}
+};
 
 /**
  * Provides theme state and actions with MUI integration.

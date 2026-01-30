@@ -1,7 +1,7 @@
 import {describe, it, expect, vi} from 'vitest';
 import {render, screen} from '@testing-library/react';
-import {HomePage} from '../pages/home-page';
-import {TestWrapper} from '../test/test-wrapper';
+import {HomePage} from '@client/pages/home-page';
+import {TestWrapper} from '@client/test/test-wrapper';
 
 describe('HomePage', () => {
 	it('renders home heading', () => {

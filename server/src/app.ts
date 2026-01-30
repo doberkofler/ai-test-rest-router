@@ -10,6 +10,7 @@ import {authRoutes} from './routes/auth.routes.ts';
 import {apiRoutes} from './routes/api.routes.ts';
 import {configService} from './services/config.service.ts';
 import {sessionService} from './services/session.service.ts';
+import {SHARED_CONSTANTS} from '@shared/logic';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -58,20 +59,21 @@ export async function createApp() {
 	app.use(morgan('combined'));
 
 	// Health check
-	app.get('/api/health', (_req, res) => {
+	app.get(`${SHARED_CONSTANTS.API_BASE}/health`, (_req, res) => {
 		res.json({status: 'ok'});
 	});
 
 	// Routes
-	app.use('/api/auth', authRoutes);
-	app.use('/api', apiRoutes);
+	app.use(`${SHARED_CONSTANTS.API_BASE}/auth`, authRoutes);
+	app.use(SHARED_CONSTANTS.API_BASE, apiRoutes);
 
 	// Static files & SPA fallback
 	const clientPath = path.join(__dirname, '../../client/dist');
 	app.use(serveStatic(clientPath));
 
 	// Use named function for coverage
-	app.get(/^(?!\/api).+/, function spaFallback(_req, res) {
+	const spaExclude = new RegExp(`^(?!${SHARED_CONSTANTS.API_BASE}).+`);
+	app.get(spaExclude, function spaFallback(_req, res) {
 		res.sendFile(path.join(clientPath, 'index.html'));
 	});
 

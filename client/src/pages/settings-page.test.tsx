@@ -1,7 +1,7 @@
 import {describe, it, expect, vi} from 'vitest';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
-import {SettingsPage} from '../pages/settings-page';
-import {TestWrapper} from '../test/test-wrapper';
+import {SettingsPage} from '@client/pages/settings-page';
+import {TestWrapper} from '@client/test/test-wrapper';
 
 describe('SettingsPage', () => {
 	it('renders settings sections', async () => {

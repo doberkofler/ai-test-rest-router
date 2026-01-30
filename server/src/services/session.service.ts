@@ -4,7 +4,7 @@ import {configService} from './config.service.ts';
 /**
  * Session data structure.
  */
-export interface Session {
+export type Session = {
 	/** Username of the logged in user. */
 	username: string;
 	/** Full name of the user. */
@@ -13,7 +13,7 @@ export interface Session {
 	loginTimestamp: string;
 	/** Timestamp of last activity for timeout calculation. */
 	lastActive: number;
-}
+};
 
 /**
  * Service for managing user sessions.

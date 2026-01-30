@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
-import {AuthContext} from './auth-context';
+import {AuthContext} from '@client/contexts/auth-context.ts';
 import {UserSchema} from '@shared/logic';
-import type {UserState} from './auth-context';
+import type {UserState} from '@client/contexts/auth-context.ts';
 
 const UserStateSchema = UserSchema.nullable();
 
-interface AuthProviderProps {
+type AuthProviderProps = {
 	/** Children to be rendered. */
 	children: React.ReactNode;
-}
+};
 
 /**
  * Provides authentication state and actions.

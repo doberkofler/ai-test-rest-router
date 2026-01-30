@@ -1,6 +1,6 @@
 import React from 'react';
 import {Navigate, useLocation, Outlet} from 'react-router-dom';
-import {useAuth} from '../contexts/auth-context';
+import {useAuth} from '@client/contexts/auth-context.ts';
 
 /**
  * Component to protect routes that require authentication.

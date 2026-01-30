@@ -2,14 +2,14 @@ import {Component} from 'react';
 import type {ErrorInfo, ReactNode} from 'react';
 import {Box, Typography, Button, Paper} from '@mui/material';
 
-interface Props {
+type Props = {
 	children: ReactNode;
-}
+};
 
-interface State {
+type State = {
 	hasError: boolean;
 	error: Error | null;
-}
+};
 
 /**
  * Error boundary component to catch and display UI errors.

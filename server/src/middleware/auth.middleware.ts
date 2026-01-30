@@ -2,16 +2,17 @@ import type {Request, Response, NextFunction} from 'express';
 import {sessionService} from '../services/session.service.ts';
 import type {Session} from '../services/session.service.ts';
 import {configService} from '../services/config.service.ts';
+import {SHARED_CONSTANTS} from '@shared/logic';
 
 /**
  * Authenticated request type.
  */
-export interface AuthRequest extends Request {
+export type AuthRequest = Request & {
 	/** Session data. */
 	session?: Session;
 	/** Session ID. */
 	sid?: string;
-}
+};
 
 /**
  * Validates the session cookie and updates last active timestamp.
@@ -20,7 +21,7 @@ export interface AuthRequest extends Request {
  * @param next - Next function.
  */
 export const authGuard = (req: Request, res: Response, next: NextFunction) => {
-	const sid = (req.cookies as Record<string, string>)['sid'];
+	const sid = (req.cookies as Record<string, string>)[SHARED_CONSTANTS.COOKIE_NAME];
 	if (!sid) {
 		res.status(401).json({error: 'Unauthorized'});
 		return;
@@ -37,7 +38,7 @@ export const authGuard = (req: Request, res: Response, next: NextFunction) => {
 	const sessionTimeoutMs = options.sessionTimeoutMinutes * 60 * 1000;
 	if (now - session.lastActive > sessionTimeoutMs) {
 		sessionService.deleteSession(sid);
-		res.clearCookie('sid');
+		res.clearCookie(SHARED_CONSTANTS.COOKIE_NAME);
 		res.status(401).json({error: 'Session timed out'});
 		return;
 	}

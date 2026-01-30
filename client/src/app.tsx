@@ -1,10 +1,10 @@
 import {Routes, Route} from 'react-router-dom';
-import {MainLayout} from './layouts/main-layout';
-import {HomePage} from './pages/home-page';
-import {AboutPage} from './pages/about-page';
-import {SettingsPage} from './pages/settings-page';
-import {LoginPage} from './pages/login-page';
-import {ProtectedRoute} from './components/protected-route';
+import {MainLayout} from '@client/layouts/main-layout.tsx';
+import {HomePage} from '@client/pages/home-page.tsx';
+import {AboutPage} from '@client/pages/about-page.tsx';
+import {SettingsPage} from '@client/pages/settings-page.tsx';
+import {LoginPage} from '@client/pages/login-page.tsx';
+import {ProtectedRoute} from '@client/components/protected-route.tsx';
 
 /**
  * Root application content component.

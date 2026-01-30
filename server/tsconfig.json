@@ -4,12 +4,7 @@
 		"composite": true,
 		"module": "NodeNext",
 		"moduleResolution": "NodeNext",
-		"noEmit": true,
-		"baseUrl": ".",
-		"allowImportingTsExtensions": true,
-		"paths": {
-			"@shared/logic": ["../shared/schemas.ts"]
-		}
+		"noEmit": true
 	},
-	"include": ["src/**/*", "../shared/schemas.ts"]
+	"include": ["src/**/*", "../shared/src/**/*"]
 }

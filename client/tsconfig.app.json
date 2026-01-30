@@ -4,13 +4,7 @@
 		"composite": true,
 		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"jsx": "react-jsx",
-		"types": ["vite/client", "vitest/globals"],
-		"noEmit": true,
-		"baseUrl": ".",
-		"allowImportingTsExtensions": true,
-		"paths": {
-			"@shared/logic": ["../shared/schemas.ts"]
-		}
+		"types": ["vite/client", "vitest/globals"]
 	},
-	"include": ["src", "../shared/schemas.ts"]
+	"include": ["src/**/*", "../shared/src/**/*"]
 }

@@ -1,6 +1,8 @@
 import type {z} from 'zod';
+import {env} from '@client/env.ts';
+import {SHARED_CONSTANTS} from '@shared/logic';
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = `${env.VITE_API_URL}${SHARED_CONSTANTS.API_BASE}`;
 
 /**
  * Standard API error structure.

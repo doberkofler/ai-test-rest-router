@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import {useAuth} from '../contexts/auth-context';
-import {useThemeContext} from '../contexts/theme-provider';
+import {useAuth} from '@client/contexts/auth-context.ts';
+import {useThemeContext} from '@client/contexts/theme-provider.tsx';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {Box, Button, Card, CardContent, TextField, Typography, Alert, IconButton, Tooltip} from '@mui/material';
 import {Brightness4 as Brightness4Icon, Brightness7 as Brightness7Icon} from '@mui/icons-material';
 import {z} from 'zod';
-import {apiClient} from '../services/api-client';
+import {apiClient} from '@client/services/api-client.ts';
 
 const LoginResponseSchema = z.object({
 	username: z.string(),

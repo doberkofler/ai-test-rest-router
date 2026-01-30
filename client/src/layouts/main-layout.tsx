@@ -25,9 +25,9 @@ import {
 	Brightness4 as Brightness4Icon,
 	Brightness7 as Brightness7Icon,
 } from '@mui/icons-material';
-import {useAuth} from '../contexts/auth-context';
-import {useThemeContext} from '../contexts/theme-provider';
-import {apiClient} from '../services/api-client';
+import {useAuth} from '@client/contexts/auth-context.ts';
+import {useThemeContext} from '@client/contexts/theme-provider.tsx';
+import {apiClient} from '@client/services/api-client.ts';
 
 const drawerWidth = '240px';
 

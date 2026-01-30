@@ -1,8 +1,8 @@
 import React from 'react';
 import type {ReactNode} from 'react';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import {AuthProvider} from '../contexts/auth-provider';
-import {ThemeProvider} from '../contexts/theme-provider';
+import {AuthProvider} from '@client/contexts/auth-provider.tsx';
+import {ThemeProvider} from '@client/contexts/theme-provider.tsx';
 
 const queryClient = new QueryClient({
 	defaultOptions: {

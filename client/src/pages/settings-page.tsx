@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useQuery, useMutation, useQueryClient} from '@tanstack/react-query';
 import {OptionsSchema} from '@shared/logic';
 import type {Options} from '@shared/logic';
-import {useThemeContext} from '../contexts/theme-provider';
+import {useThemeContext} from '@client/contexts/theme-provider.tsx';
 import {
 	Typography,
 	Box,
@@ -18,7 +18,7 @@ import {
 	Divider,
 } from '@mui/material';
 import {Brightness4 as Brightness4Icon, Brightness7 as Brightness7Icon, Computer as ComputerIcon} from '@mui/icons-material';
-import {apiClient} from '../services/api-client';
+import {apiClient} from '@client/services/api-client.ts';
 
 const fetchOptions = async (): Promise<Options> => {
 	return apiClient.get('/options', OptionsSchema);

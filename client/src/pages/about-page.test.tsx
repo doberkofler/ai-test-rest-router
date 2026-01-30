@@ -1,7 +1,7 @@
 import {describe, it, expect, vi} from 'vitest';
 import {render, screen, waitFor} from '@testing-library/react';
-import {AboutPage} from '../pages/about-page';
-import {TestWrapper} from '../test/test-wrapper';
+import {AboutPage} from '@client/pages/about-page';
+import {TestWrapper} from '@client/test/test-wrapper';
 
 describe('AboutPage', () => {
 	it('renders headings', async () => {
