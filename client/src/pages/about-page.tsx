@@ -19,6 +19,15 @@ const fetchServerInfo = async (): Promise<ServerInfo> => {
 };
 
 /**
+ * Formats a date string into a user-friendly locale string.
+ * @param date - Date string or number.
+ * @returns Formatted date string.
+ */
+const formatDate = (date: string | number) => {
+	return new Date(date).toLocaleString();
+};
+
+/**
  * About page component displaying system and version information using MUI.
  * @returns React component.
  */
@@ -32,7 +41,7 @@ export const AboutPage: React.FC = () => {
 	} = useQuery({
 		queryKey: ['serverInfo'],
 		queryFn: fetchServerInfo,
-		refetchInterval: 5000,
+		refetchInterval: 60000,
 	});
 
 	useEffect(() => {
@@ -64,10 +73,10 @@ export const AboutPage: React.FC = () => {
 					<Divider />
 					<List dense>
 						<ListItem>
-							<ListItemText primary="Build Timestamp" secondary={__BUILD_TIMESTAMP__} />
+							<ListItemText primary="Build Timestamp" secondary={formatDate(__BUILD_TIMESTAMP__)} />
 						</ListItem>
 						<ListItem>
-							<ListItemText primary="Current Time" secondary={clientTime} />
+							<ListItemText primary="Current Time" secondary={formatDate(clientTime)} />
 						</ListItem>
 						<ListItem>
 							<ListItemText primary="React Version" secondary={React.version} />
@@ -88,10 +97,10 @@ export const AboutPage: React.FC = () => {
 						serverInfo && (
 							<List dense>
 								<ListItem>
-									<ListItemText primary="Start Timestamp" secondary={serverInfo.startTimestamp} />
+									<ListItemText primary="Start Timestamp" secondary={formatDate(serverInfo.startTimestamp)} />
 								</ListItem>
 								<ListItem>
-									<ListItemText primary="Current Time" secondary={serverInfo.serverTime} />
+									<ListItemText primary="Current Time" secondary={formatDate(serverInfo.serverTime)} />
 								</ListItem>
 								<ListItem>
 									<ListItemText primary="Node Version" secondary={serverInfo.nodeVersion} />
@@ -123,7 +132,7 @@ export const AboutPage: React.FC = () => {
 									<ListItemText primary="Full Name" secondary={serverInfo.user.fullName} />
 								</ListItem>
 								<ListItem>
-									<ListItemText primary="Session Created" secondary={new Date(serverInfo.user.loginTimestamp).toLocaleString()} />
+									<ListItemText primary="Session Created" secondary={formatDate(serverInfo.user.loginTimestamp)} />
 								</ListItem>
 							</List>
 						)

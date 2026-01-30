@@ -1,4 +1,5 @@
 import {randomUUID} from 'node:crypto';
+import {configService} from './config.service.ts';
 
 /**
  * Session data structure.
@@ -19,6 +20,44 @@ export interface Session {
  */
 class SessionService {
 	private sessions = new Map<string, Session>();
+	private cleanupInterval: NodeJS.Timeout | null = null;
+
+	/**
+	 * Starts the background cleanup task.
+	 */
+	startCleanupTask() {
+		if (this.cleanupInterval) return;
+
+		// Run cleanup every minute
+		this.cleanupInterval = setInterval(() => {
+			this.cleanup();
+		}, 60_000);
+	}
+
+	/**
+	 * Stops the background cleanup task.
+	 */
+	stopCleanupTask() {
+		if (this.cleanupInterval) {
+			clearInterval(this.cleanupInterval);
+			this.cleanupInterval = null;
+		}
+	}
+
+	/**
+	 * Performs cleanup of expired sessions.
+	 */
+	private cleanup() {
+		const now = Date.now();
+		const timeoutMinutes = configService.getOptions().sessionTimeoutMinutes;
+		const timeoutMs = timeoutMinutes * 60 * 1000;
+
+		for (const [sid, session] of this.sessions.entries()) {
+			if (now - session.lastActive > timeoutMs) {
+				this.sessions.delete(sid);
+			}
+		}
+	}
 
 	/**
 	 * Creates a new session.

@@ -9,6 +9,7 @@ import morgan from 'morgan';
 import {authRoutes} from './routes/auth.routes.ts';
 import {apiRoutes} from './routes/api.routes.ts';
 import {configService} from './services/config.service.ts';
+import {sessionService} from './services/session.service.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -21,6 +22,9 @@ export async function createApp() {
 
 	// Load configuration
 	await configService.loadConfig();
+
+	// Start session cleanup
+	sessionService.startCleanupTask();
 
 	// Load express version from node_modules
 	let expressVersion = 'unknown';
@@ -69,6 +73,13 @@ export async function createApp() {
 	// Use named function for coverage
 	app.get(/^(?!\/api).+/, function spaFallback(_req, res) {
 		res.sendFile(path.join(clientPath, 'index.html'));
+	});
+
+	// Centralized error handler
+	app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+		console.error(err);
+		const message = err instanceof Error ? err.message : 'Internal Server Error';
+		res.status(500).json({error: message});
 	});
 
 	return app;
