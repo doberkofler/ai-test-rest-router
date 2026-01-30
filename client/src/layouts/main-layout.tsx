@@ -1,16 +1,45 @@
-import React from 'react';
-import {NavLink, Outlet, useNavigate} from 'react-router-dom';
+import React, {useState} from 'react';
+import {NavLink, Outlet, useNavigate, useLocation} from 'react-router-dom';
+import {
+	Box,
+	Drawer,
+	AppBar,
+	Toolbar,
+	List,
+	Typography,
+	Divider,
+	IconButton,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText,
+	Tooltip,
+} from '@mui/material';
+import {
+	Menu as MenuIcon,
+	ChevronLeft as ChevronLeftIcon,
+	Home as HomeIcon,
+	Info as InfoIcon,
+	Settings as SettingsIcon,
+	Logout as LogoutIcon,
+	Brightness4 as Brightness4Icon,
+	Brightness7 as Brightness7Icon,
+} from '@mui/icons-material';
 import {useAuth} from '../contexts/auth-context';
 import {useThemeContext} from '../contexts/theme-provider';
 
+const drawerWidth = '240px';
+
 /**
- * Main application layout with sidebar navigation and logout.
+ * Main application layout with MUI sidebar navigation and logout.
  * @returns React component.
  */
 export const MainLayout: React.FC = () => {
 	const {logout} = useAuth();
 	const {theme, setTheme} = useThemeContext();
 	const navigate = useNavigate();
+	const location = useLocation();
+	const [open, setOpen] = useState(true);
 
 	const handleLogout = () => {
 		fetch('http://localhost:3001/api/auth/logout', {
@@ -23,7 +52,7 @@ export const MainLayout: React.FC = () => {
 			})
 			.catch((error: unknown) => {
 				console.error('Logout failed', error);
-				logout(); // Clear local even if server fails
+				logout();
 				navigate('/login');
 			});
 	};
@@ -33,58 +62,126 @@ export const MainLayout: React.FC = () => {
 		setTheme(nextTheme);
 	};
 
-	const themeIcon = theme === 'dark' ? '☀️' : '🌙';
+	const toggleDrawer = () => {
+		setOpen(!open);
+	};
+
+	const menuItems = [
+		{text: 'Home', icon: <HomeIcon />, path: '/'},
+		{text: 'About', icon: <InfoIcon />, path: '/about'},
+		{text: 'Settings', icon: <SettingsIcon />, path: '/settings'},
+	];
+
+	const getPageTitle = () => {
+		const current = menuItems.find((item) => item.path === location.pathname);
+		return current?.text ?? 'App';
+	};
 
 	return (
-		<div className="layout-container">
-			<aside className="sidebar" style={{display: 'flex', flexDirection: 'column'}}>
-				<nav style={{flex: 1}}>
-					<ul>
-						<li>
-							<NavLink to="/" className={({isActive}) => (isActive ? 'active' : '')}>
-								Home
-							</NavLink>
-						</li>
-						<li>
-							<NavLink to="/about" className={({isActive}) => (isActive ? 'active' : '')}>
-								About
-							</NavLink>
-						</li>
-						<li>
-							<NavLink to="/settings" className={({isActive}) => (isActive ? 'active' : '')}>
-								Settings
-							</NavLink>
-						</li>
-					</ul>
-				</nav>
-				<div style={{display: 'flex', gap: '0.5rem', marginTop: 'auto'}}>
-					<button
-						onClick={toggleTheme}
-						title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-						style={{
-							flex: 1,
-							padding: '0.75rem',
-							background: '#646cff',
-							color: '#fff',
-							border: 'none',
-							borderRadius: '4px',
-							cursor: 'pointer',
-							fontSize: '1rem',
-						}}
-					>
-						{themeIcon}
-					</button>
-					<button
-						onClick={handleLogout}
-						style={{flex: 1, padding: '0.75rem', background: '#e53e3e', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer'}}
-					>
-						Logout
-					</button>
-				</div>
-			</aside>
-			<main className="content">
+		<Box sx={{display: 'flex'}}>
+			<AppBar
+				position="fixed"
+				sx={{
+					zIndex: (theme) => theme.zIndex.drawer + 1,
+					transition: (theme) =>
+						theme.transitions.create(['width', 'margin'], {
+							easing: theme.transitions.easing.sharp,
+							duration: theme.transitions.duration.leavingScreen,
+						}),
+					...(open && {
+						marginLeft: drawerWidth,
+						width: `calc(100% - ${drawerWidth})`,
+						transition: (theme) =>
+							theme.transitions.create(['width', 'margin'], {
+								easing: theme.transitions.easing.sharp,
+								duration: theme.transitions.duration.enteringScreen,
+							}),
+					}),
+				}}
+			>
+				<Toolbar variant="dense">
+					<IconButton color="inherit" aria-label="open drawer" onClick={toggleDrawer} edge="start" sx={{marginRight: 2}}>
+						{open ? <ChevronLeftIcon /> : <MenuIcon />}
+					</IconButton>
+					<Typography variant="h6" noWrap component="div" sx={{flexGrow: 1}}>
+						{getPageTitle()}
+					</Typography>
+					<Tooltip title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
+						<IconButton color="inherit" onClick={toggleTheme}>
+							{theme === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+						</IconButton>
+					</Tooltip>
+					<Tooltip title="Logout">
+						<IconButton color="inherit" onClick={handleLogout}>
+							<LogoutIcon />
+						</IconButton>
+					</Tooltip>
+				</Toolbar>
+			</AppBar>
+			<Drawer
+				variant="permanent"
+				open={open}
+				sx={{
+					width: open ? drawerWidth : (theme) => theme.spacing(14),
+					flexShrink: 0,
+					whiteSpace: 'nowrap',
+					boxSizing: 'border-box',
+					'& .MuiDrawer-paper': {
+						width: open ? drawerWidth : (theme) => theme.spacing(14),
+						transition: (theme) =>
+							theme.transitions.create('width', {
+								easing: theme.transitions.easing.sharp,
+								duration: open ? theme.transitions.duration.enteringScreen : theme.transitions.duration.leavingScreen,
+							}),
+						overflowX: 'hidden',
+					},
+				}}
+			>
+				<Toolbar variant="dense" />
+				<Box sx={{overflow: 'auto'}}>
+					<List>
+						{menuItems.map((item) => (
+							<ListItem key={item.text} disablePadding sx={{display: 'block'}}>
+								<ListItemButton
+									component={NavLink}
+									to={item.path}
+									sx={{
+										minHeight: 48,
+										justifyContent: open ? 'initial' : 'center',
+										px: 2.5,
+										'&.active': {
+											bgcolor: 'action.selected',
+											'& .MuiListItemIcon-root': {
+												color: 'primary.main',
+											},
+											'& .MuiListItemText-primary': {
+												color: 'primary.main',
+												fontWeight: 'bold',
+											},
+										},
+									}}
+								>
+									<ListItemIcon
+										sx={{
+											minWidth: 0,
+											mr: open ? 3 : 'auto',
+											justifyContent: 'center',
+										}}
+									>
+										{item.icon}
+									</ListItemIcon>
+									<ListItemText primary={item.text} sx={{opacity: open ? 1 : 0}} />
+								</ListItemButton>
+							</ListItem>
+						))}
+					</List>
+					<Divider />
+				</Box>
+			</Drawer>
+			<Box component="main" sx={{flexGrow: 1, p: 3}}>
+				<Toolbar variant="dense" />
 				<Outlet />
-			</main>
-		</div>
+			</Box>
+		</Box>
 	);
 };

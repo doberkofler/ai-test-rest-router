@@ -13,8 +13,8 @@ describe('SettingsPage', () => {
 		render(<SettingsPage />, {wrapper: TestWrapper});
 
 		await waitFor(() => {
-			expect(screen.getByText('Theme')).toBeDefined();
-			expect(screen.getByText('Server Options')).toBeDefined();
+			expect(screen.getByRole('heading', {name: /appearance/i})).toBeDefined();
+			expect(screen.getByRole('heading', {name: /server options/i})).toBeDefined();
 		});
 	});
 
@@ -35,7 +35,7 @@ describe('SettingsPage', () => {
 			fireEvent.click(lightBtn);
 			expect(globalThis.document.documentElement.classList.contains('light')).toBe(true);
 
-			const systemBtn = screen.getByRole('button', {name: /system default/i});
+			const systemBtn = screen.getByRole('button', {name: /system/i});
 			fireEvent.click(systemBtn);
 		});
 	});
@@ -64,7 +64,7 @@ describe('SettingsPage', () => {
 		render(<SettingsPage />, {wrapper: TestWrapper});
 
 		await waitFor(() => {
-			const systemBtn = screen.getByRole('button', {name: /system default/i});
+			const systemBtn = screen.getByRole('button', {name: /system/i});
 			fireEvent.click(systemBtn);
 		});
 
@@ -187,11 +187,13 @@ describe('SettingsPage', () => {
 
 		render(<SettingsPage />, {wrapper: TestWrapper});
 
+		const input = await screen.findByLabelText(/session timeout/i);
+		fireEvent.change(input, {target: {value: 'abc'}});
+		
+		const saveBtn = await screen.findByRole('button', {name: /save settings/i});
+		fireEvent.click(saveBtn);
+
 		await waitFor(() => {
-			const input = screen.getByLabelText(/session timeout/i);
-			fireEvent.change(input, {target: {value: 'abc'}});
-			const saveBtn = screen.getByRole('button', {name: /save settings/i});
-			fireEvent.click(saveBtn);
 			expect(screen.getByText(/must be between/i)).toBeDefined();
 		});
 	});
@@ -231,7 +233,7 @@ describe('SettingsPage', () => {
 
 		render(<SettingsPage />, {wrapper: TestWrapper});
 		await waitFor(() => {
-			expect(screen.getByRole('button', {name: /system default/i})).toBeDefined();
+			expect(screen.getByRole('button', {name: /system/i})).toBeDefined();
 		});
 	});
 
@@ -268,7 +270,7 @@ describe('SettingsPage', () => {
 
 		render(<SettingsPage />, {wrapper: TestWrapper});
 		await waitFor(() => {
-			expect(screen.getByRole('button', {name: /system default/i})).toBeDefined();
+			expect(screen.getByRole('button', {name: /system/i})).toBeDefined();
 		});
 	});
 });

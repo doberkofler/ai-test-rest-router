@@ -1,6 +1,6 @@
-/* eslint-disable import-x/no-named-as-default */
-import React, {createContext, useContext} from 'react';
-import useTheme from '../hooks/use-theme';
+import React, {createContext, useContext, useMemo} from 'react';
+import {ThemeProvider as MuiThemeProvider, createTheme, CssBaseline, useMediaQuery} from '@mui/material';
+import {useTheme} from '../hooks/use-theme';
 import type {ReactNode} from 'react';
 
 interface ThemeContextType {
@@ -16,15 +16,61 @@ interface ThemeProviderProps {
 }
 
 /**
- * Provides theme state and actions.
+ * Provides theme state and actions with MUI integration.
  * @param props - Component props.
  * @param props.children - Children to be rendered.
  * @returns React component.
  */
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
 	const {theme, setTheme} = useTheme();
+	const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-	return <ThemeContext.Provider value={{theme, setTheme}}>{children}</ThemeContext.Provider>;
+	const muiTheme = useMemo(() => {
+		const mode = theme === 'system' ? (prefersDarkMode ? 'dark' : 'light') : theme;
+		return createTheme({
+			palette: {
+				mode,
+			},
+			// Compact density settings
+			spacing: 4,
+			components: {
+				MuiButton: {
+					defaultProps: {
+						size: 'small',
+					},
+				},
+				MuiTextField: {
+					defaultProps: {
+						size: 'small',
+					},
+				},
+				MuiFormControl: {
+					defaultProps: {
+						size: 'small',
+					},
+				},
+				MuiList: {
+					defaultProps: {
+						dense: true,
+					},
+				},
+				MuiTable: {
+					defaultProps: {
+						size: 'small',
+					},
+				},
+			},
+		});
+	}, [theme, prefersDarkMode]);
+
+	return (
+		<ThemeContext.Provider value={{theme, setTheme}}>
+			<MuiThemeProvider theme={muiTheme}>
+				<CssBaseline />
+				{children}
+			</MuiThemeProvider>
+		</ThemeContext.Provider>
+	);
 };
 
 /**

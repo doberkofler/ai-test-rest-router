@@ -59,8 +59,8 @@ describe('AboutPage', () => {
 
 		await waitFor(() => {
 			expect(screen.getByText(/server information/i)).toBeDefined();
-			// Explicitly check that the user list is NOT rendered
-			expect(screen.queryByText(/login timestamp/i)).toBeNull();
+			// Explicitly check that the session info list is NOT rendered
+			expect(screen.queryByText(/session created/i)).toBeNull();
 		});
 	});
 
@@ -73,7 +73,8 @@ describe('AboutPage', () => {
 		render(<AboutPage />, {wrapper: TestWrapper});
 
 		await waitFor(() => {
-			expect(screen.getByText(/error:/i)).toBeDefined();
+			// MUI Alert doesn't include "Error:" prefix in text content, it uses severity icon
+			expect(screen.getByRole('alert')).toBeDefined();
 		});
 	});
 });
