@@ -18,26 +18,14 @@ import {
 	Divider,
 } from '@mui/material';
 import {Brightness4 as Brightness4Icon, Brightness7 as Brightness7Icon, Computer as ComputerIcon} from '@mui/icons-material';
+import {apiClient} from '../services/api-client';
 
 const fetchOptions = async (): Promise<Options> => {
-	const res = await fetch('http://localhost:3001/api/options', {
-		credentials: 'include',
-	});
-	if (!res.ok) throw new Error('Failed to fetch options');
-	const data: unknown = await res.json();
-	return OptionsSchema.parse(data);
+	return apiClient.get('/options', OptionsSchema);
 };
 
 const updateOptions = async (newOptions: Options): Promise<Options> => {
-	const res = await fetch('http://localhost:3001/api/options', {
-		method: 'POST',
-		headers: {'Content-Type': 'application/json'},
-		body: JSON.stringify(newOptions),
-		credentials: 'include',
-	});
-	if (!res.ok) throw new Error('Failed to update options');
-	const data: unknown = await res.json();
-	return OptionsSchema.parse(data);
+	return apiClient.post('/options', newOptions, OptionsSchema);
 };
 
 /**

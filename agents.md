@@ -4,8 +4,9 @@
 
 ### Root Workspace (NPM Workspaces)
 - **Install All**: `npm install`
-- **Lint All**: `npm run lint` (runs `lint` in all workspaces)
-- **Test All**: `npm run test` (runs `test` in all workspaces)
+- **Lint All**: `npm run lint` (runs `eslint .` from root)
+- **Test All**: `npm run test` (runs tests in all workspaces)
+- **E2E Tests**: `npx playwright test`
 
 ### Frontend (client/)
 - **Dev Server**: `npm run dev -w client`
@@ -20,7 +21,8 @@
 - **Single Test**: `cd server && node --test src/auth.test.ts`
 
 ### Shared (@shared/logic)
-- **Lint**: `npm run lint -w shared`
+- **Lint**: handled by root lint.
+- **Tests**: `npm run test -w shared` (placeholder)
 
 ---
 
@@ -60,10 +62,11 @@
 - **Centralized Backend**: Use the global error middleware in `server/src/app.ts`.
 - **Frontend resilience**: Use the `ErrorBoundary` component.
 - **Throw Early**: Throw on all error conditions.
+- **API Communication**: Use the centralized `apiClient` in `client/src/services/api-client.ts`.
 
 ### 5. Frontend (React 19 + MUI)
 - **Styling**: Use MUI components and `sx` props. Avoid raw CSS/SCSS where possible.
-- **Data Fetching**: Use `@tanstack/react-query`.
+- **Data Fetching**: Use `@tanstack/react-query` with `apiClient`.
 - **Theme**: Use `ThemeContext` and MUI's `ThemeProvider`.
 
 ### 6. Backend (Express 5.2 / Node 24)
@@ -71,8 +74,13 @@
 - **Middleware**: `helmet`, `cors`, `cookie-parser`, `morgan`.
 - **Session**: Memory-based `SessionService` with background cleanup.
 
+### 7. Testing
+- **Unit/Integration**: Vitest (client), Node Native Runner (server).
+- **E2E**: Playwright (in `e2e/` directory).
+- **Quality**: Ensure at least 90% test coverage for new features.
+
 ---
 
 ## 🔍 Validation Protocol
 1. **Ambiguity**: Stop and ask if requirements are unclear.
-2. **Quality**: Ensure at least 90% test coverage for new features.
+2. **Docs**: Only ISO, RFC, W3C, ECMA, and official vendor docs are authoritative.

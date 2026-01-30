@@ -27,6 +27,7 @@ import {
 } from '@mui/icons-material';
 import {useAuth} from '../contexts/auth-context';
 import {useThemeContext} from '../contexts/theme-provider';
+import {apiClient} from '../services/api-client';
 
 const drawerWidth = '240px';
 
@@ -42,10 +43,8 @@ export const MainLayout: React.FC = () => {
 	const [open, setOpen] = useState(true);
 
 	const handleLogout = () => {
-		fetch('http://localhost:3001/api/auth/logout', {
-			method: 'POST',
-			credentials: 'include',
-		})
+		apiClient
+			.post('/auth/logout')
 			.then(() => {
 				logout();
 				navigate('/login');

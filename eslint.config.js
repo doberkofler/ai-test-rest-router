@@ -8,10 +8,19 @@ import jsdoc from 'eslint-plugin-jsdoc';
 import regexp from 'eslint-plugin-regexp';
 import unicorn from 'eslint-plugin-unicorn';
 import react from 'eslint-plugin-react';
+import playwright from 'eslint-plugin-playwright';
 
 export default tseslint.config(
 	{
-		ignores: ['**/dist/**', '**/node_modules/**', 'eslint.config.js', '**/vite.config.ts', 'server/vitest.config.ts'],
+		ignores: [
+			'**/dist/**',
+			'**/node_modules/**',
+			'eslint.config.js',
+			'**/vite.config.ts',
+			'server/vitest.config.ts',
+			'e2e/**',
+			'playwright.config.ts',
+		],
 	},
 	js.configs.recommended,
 	...tseslint.configs.strictTypeChecked,
@@ -83,6 +92,15 @@ export default tseslint.config(
 		rules: {
 			...reactHooks.configs.recommended.rules,
 			'react-refresh/only-export-components': ['warn', {allowConstantExport: true}],
+		},
+	},
+	{
+		files: ['e2e/**/*.{ts,tsx}'],
+		...playwright.configs['flat/recommended'],
+		languageOptions: {
+			parserOptions: {
+				project: false,
+			},
 		},
 	},
 );

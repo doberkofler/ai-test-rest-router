@@ -3,19 +3,13 @@ import {useQuery} from '@tanstack/react-query';
 import {ServerInfoSchema} from '@shared/logic';
 import type {ServerInfo} from '@shared/logic';
 import {Typography, Box, Paper, List, ListItem, ListItemText, Divider, Alert, CircularProgress} from '@mui/material';
+import {apiClient} from '../services/api-client';
 
 /**
- * Fetches server information and validates with Zod.
+ * Fetches server information using the centralized ApiClient.
  */
 const fetchServerInfo = async (): Promise<ServerInfo> => {
-	const res = await fetch('http://localhost:3001/api/info', {
-		credentials: 'include',
-	});
-	if (res.ok) {
-		const data: unknown = await res.json();
-		return ServerInfoSchema.parse(data);
-	}
-	throw new Error(`HTTP error! status: ${res.status.toString()}`);
+	return apiClient.get('/info', ServerInfoSchema);
 };
 
 /**
@@ -41,7 +35,7 @@ export const AboutPage: React.FC = () => {
 	} = useQuery({
 		queryKey: ['serverInfo'],
 		queryFn: fetchServerInfo,
-		refetchInterval: 60000,
+		refetchInterval: 60_000,
 	});
 
 	useEffect(() => {

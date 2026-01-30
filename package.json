@@ -7,7 +7,13 @@
     "shared"
   ],
   "scripts": {
-    "lint": "npx eslint .",
+    "lint": "npm run lint --workspaces",
     "test": "npm run test --workspaces"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.1"
   }
 }

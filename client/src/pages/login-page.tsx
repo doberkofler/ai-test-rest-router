@@ -5,14 +5,11 @@ import {useNavigate, useLocation} from 'react-router-dom';
 import {Box, Button, Card, CardContent, TextField, Typography, Alert, IconButton, Tooltip} from '@mui/material';
 import {Brightness4 as Brightness4Icon, Brightness7 as Brightness7Icon} from '@mui/icons-material';
 import {z} from 'zod';
+import {apiClient} from '../services/api-client';
 
 const LoginResponseSchema = z.object({
 	username: z.string(),
 	fullName: z.string(),
-});
-
-const ErrorResponseSchema = z.object({
-	error: z.string().optional(),
 });
 
 /**
@@ -36,20 +33,8 @@ export const LoginPage: React.FC = () => {
 		e.preventDefault();
 		setError(null);
 
-		fetch('http://localhost:3001/api/auth/login', {
-			method: 'POST',
-			headers: {'Content-Type': 'application/json'},
-			body: JSON.stringify({username, password}),
-			credentials: 'include',
-		})
-			.then(async (res) => {
-				const json: unknown = await res.json();
-				if (res.ok) {
-					return LoginResponseSchema.parse(json);
-				}
-				const data = ErrorResponseSchema.parse(json);
-				throw new Error(data.error ?? 'Login failed');
-			})
+		apiClient
+			.post('/auth/login', {username, password}, LoginResponseSchema)
 			.then((user) => {
 				login(user);
 				navigate(from, {replace: true});

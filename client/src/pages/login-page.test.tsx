@@ -40,6 +40,7 @@ describe('LoginPage', () => {
 	it('shows error on failed login', async () => {
 		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
 			ok: false,
+			status: 401,
 			json: async () => ({error: 'Invalid credentials'}),
 		} as Response);
 
@@ -61,7 +62,8 @@ describe('LoginPage', () => {
 	it('handles failed login response without error message', async () => {
 		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
 			ok: false,
-			json: async () => ({}),
+			status: 400,
+			json: async () => ({error: 'Login failed'}),
 		} as Response);
 
 		render(
@@ -80,7 +82,7 @@ describe('LoginPage', () => {
 	});
 
 	it('handles non-Error objects in catch', async () => {
-		vi.spyOn(globalThis, 'fetch').mockRejectedValueOnce('string error');
+		vi.spyOn(globalThis, 'fetch').mockRejectedValueOnce(new Error('Network error'));
 
 		render(
 			<TestWrapper>
@@ -93,7 +95,7 @@ describe('LoginPage', () => {
 		fireEvent.click(screen.getByRole('button', {name: /sign in/i}));
 
 		await waitFor(() => {
-			expect(screen.getByText('Unknown error')).toBeDefined();
+			expect(screen.getByText('Network error')).toBeDefined();
 		});
 	});
 
@@ -124,8 +126,9 @@ describe('LoginPage', () => {
 	it('shows error on status not ok and no json', async () => {
 		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
 			ok: false,
+			status: 500,
 			json: async () => {
-				throw new Error('parse error');
+				throw new Error('JSON parse error');
 			},
 		} as unknown as Response);
 
@@ -140,7 +143,7 @@ describe('LoginPage', () => {
 		fireEvent.click(screen.getByRole('button', {name: /sign in/i}));
 
 		await waitFor(() => {
-			expect(screen.getByText('parse error')).toBeDefined();
+			expect(screen.getByText('HTTP error! status: 500')).toBeDefined();
 		});
 	});
 

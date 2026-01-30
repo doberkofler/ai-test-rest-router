@@ -107,6 +107,8 @@ describe('SettingsPage', () => {
 			} as Response)
 			.mockResolvedValueOnce({
 				ok: false,
+				status: 400,
+				json: async () => ({error: 'Failed to update settings'}),
 			} as Response);
 
 		render(<SettingsPage />, {wrapper: TestWrapper});
@@ -129,7 +131,7 @@ describe('SettingsPage', () => {
 				ok: true,
 				json: async () => ({sessionTimeoutMinutes: 60}),
 			} as Response)
-			.mockRejectedValueOnce('string error');
+			.mockRejectedValueOnce(new Error('Update failed'));
 
 		render(<SettingsPage />, {wrapper: TestWrapper});
 
@@ -240,6 +242,8 @@ describe('SettingsPage', () => {
 	it('handles fetch failure', async () => {
 		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
 			ok: false,
+			status: 500,
+			json: async () => ({error: 'Error loading options'}),
 		} as Response);
 
 		render(<SettingsPage />, {wrapper: TestWrapper});

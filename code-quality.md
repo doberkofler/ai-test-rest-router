@@ -82,6 +82,7 @@ Use `prettier` with the following settings.
 - Use `eslint-plugin-jsdoc`
 - Use `eslint-plugin-react` (only for client)
 - Use `eslint-plugin-react-hooks` (only for client)
+- Use `eslint-plugin-playwright` (only for client)
 - Use `eslint-plugin-regexp`
 - Use `eslint-plugin-unicorn`
 - Use `@vitest/eslint-plugin`
