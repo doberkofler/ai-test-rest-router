@@ -1,16 +1,19 @@
 {
-  "name": "@shared/logic",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "exports": {
-    ".": "./schemas.ts"
-  },
-  "scripts": {
-    "test": "true",
-    "lint": "eslint ."
-  },
-  "dependencies": {
-    "zod": "^4.3.6"
-  }
+	"name": "@shared/logic",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./schemas.ts"
+	},
+	"scripts": {
+		"test": "true",
+		"lint": "eslint ."
+	},
+	"peerDependencies": {
+		"zod": "^4.3.6"
+	},
+	"devDependencies": {
+		"zod": "^4.3.6"
+	}
 }

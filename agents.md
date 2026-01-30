@@ -6,7 +6,7 @@
 - **Install All**: `npm install`
 - **Lint All**: `npm run lint` (runs `eslint .` from root)
 - **Test All**: `npm run test` (runs tests in all workspaces)
-- **E2E Tests**: `npx playwright test`
+- **E2E Tests**: `npm run test:e2e`
 
 ### Frontend (client/)
 - **Dev Server**: `npm run dev -w client`
