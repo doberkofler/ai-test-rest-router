@@ -8,7 +8,7 @@ import {ThemeProvider} from './contexts/theme-provider';
 import {MemoryRouter} from 'react-router-dom';
 
 const queryClient = new QueryClient({
-	defaultOptions: { queries: { retry: false } }
+	defaultOptions: {queries: {retry: false}},
 });
 
 describe('App Routing', () => {
@@ -24,7 +24,7 @@ describe('App Routing', () => {
 						</MemoryRouter>
 					</AuthProvider>
 				</QueryClientProvider>
-			</ThemeProvider>
+			</ThemeProvider>,
 		);
 
 		await waitFor(() => {
@@ -33,10 +33,13 @@ describe('App Routing', () => {
 	});
 
 	it('renders home page when authenticated', async () => {
-		vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(JSON.stringify({
-			username: 'admin',
-			fullName: 'Admin'
-		}));
+		vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(
+			JSON.stringify({
+				username: 'admin',
+				password: 'secret',
+				fullName: 'Admin',
+			}),
+		);
 
 		render(
 			<ThemeProvider>
@@ -47,7 +50,7 @@ describe('App Routing', () => {
 						</MemoryRouter>
 					</AuthProvider>
 				</QueryClientProvider>
-			</ThemeProvider>
+			</ThemeProvider>,
 		);
 
 		await waitFor(() => {
@@ -67,7 +70,7 @@ describe('App Routing', () => {
 						</MemoryRouter>
 					</AuthProvider>
 				</QueryClientProvider>
-			</ThemeProvider>
+			</ThemeProvider>,
 		);
 
 		await waitFor(() => {
@@ -87,7 +90,7 @@ describe('App Routing', () => {
 						</MemoryRouter>
 					</AuthProvider>
 				</QueryClientProvider>
-			</ThemeProvider>
+			</ThemeProvider>,
 		);
 
 		await waitFor(() => {
@@ -107,7 +110,7 @@ describe('App Routing', () => {
 						</MemoryRouter>
 					</AuthProvider>
 				</QueryClientProvider>
-			</ThemeProvider>
+			</ThemeProvider>,
 		);
 
 		await waitFor(() => {
@@ -123,7 +126,7 @@ describe('App Routing', () => {
 
 		// Silence console.error for this test
 		vi.spyOn(console, 'error').mockImplementation(() => {});
-		
+
 		expect(() => render(<TestComponent />)).toThrow('useAuth must be used within an AuthProvider');
 	});
 
@@ -133,14 +136,20 @@ describe('App Routing', () => {
 				<AuthProvider>
 					<div>Child</div>
 				</AuthProvider>
-			</QueryClientProvider>
+			</QueryClientProvider>,
 		);
 		expect(screen.getByText('Child')).toBeDefined();
 	});
 
 	it('isAuthenticated handles non-null user', async () => {
-		vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(JSON.stringify({username: 'test'}));
-		
+		vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(
+			JSON.stringify({
+				username: 'test',
+				password: 'password',
+				fullName: 'Test User',
+			}),
+		);
+
 		const TestStatus = () => {
 			const {isAuthenticated} = useAuth();
 			return <div>{isAuthenticated ? 'AUTH' : 'NOAUTH'}</div>;
@@ -151,7 +160,7 @@ describe('App Routing', () => {
 				<AuthProvider>
 					<TestStatus />
 				</AuthProvider>
-			</QueryClientProvider>
+			</QueryClientProvider>,
 		);
 
 		expect(screen.getByText('AUTH')).toBeDefined();

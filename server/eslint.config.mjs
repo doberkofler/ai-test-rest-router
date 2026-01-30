@@ -9,13 +9,7 @@ import globals from 'globals';
 
 export default tseslint.config(
 	{
-		ignores: [
-			'**/dist/**',
-			'**/coverage/**',
-			'**/node_modules/**',
-			'eslint.config.mjs',
-			'vitest.config.ts',
-		],
+		ignores: ['**/dist/**', '**/coverage/**', '**/node_modules/**', 'eslint.config.mjs', 'vitest.config.ts'],
 	},
 	eslint.configs.recommended,
 	...tseslint.configs.strictTypeChecked,
@@ -41,11 +35,11 @@ export default tseslint.config(
 		},
 		rules: {
 			'no-unused-vars': 'off',
-			'@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-			'@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+			'@typescript-eslint/no-unused-vars': ['error', {argsIgnorePattern: '^_'}],
+			'@typescript-eslint/consistent-type-imports': ['error', {prefer: 'type-imports'}],
 			'unicorn/prevent-abbreviations': 'off',
 			'unicorn/no-null': 'off',
-			'jsdoc/require-jsdoc': ['error', { publicOnly: true }],
+			'jsdoc/require-jsdoc': ['error', {publicOnly: true}],
 		},
 	},
 	{

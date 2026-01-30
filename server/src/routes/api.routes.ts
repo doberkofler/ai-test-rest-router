@@ -12,14 +12,14 @@ router.use(authGuard);
 
 router.get('/info', function getInfo(req: AuthRequest, res: Response) {
 	const session = req.session;
-	
+
 	if (!session) {
 		res.status(401).json({error: 'No session'});
 		return;
 	}
 
-	const startTimestamp = (req.app.get('START_TIMESTAMP') as string);
-	const expressVersion = (req.app.get('EXPRESS_VERSION') as string);
+	const startTimestamp = req.app.get('START_TIMESTAMP') as string;
+	const expressVersion = req.app.get('EXPRESS_VERSION') as string;
 
 	res.json({
 		startTimestamp,
@@ -30,7 +30,7 @@ router.get('/info', function getInfo(req: AuthRequest, res: Response) {
 			username: session.username,
 			fullName: session.fullName,
 			loginTimestamp: session.loginTimestamp,
-		}
+		},
 	});
 });
 

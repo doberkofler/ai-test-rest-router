@@ -32,7 +32,11 @@ const updateOptions = async (newOptions: Options): Promise<Options> => {
 export const SettingsPage: React.FC = () => {
 	const queryClient = useQueryClient();
 	const {theme, setTheme} = useTheme();
-	const {data: currentOptions, isLoading, error} = useQuery({
+	const {
+		data: currentOptions,
+		isLoading,
+		error,
+	} = useQuery({
 		queryKey: ['options'],
 		queryFn: fetchOptions,
 	});
@@ -74,11 +78,7 @@ export const SettingsPage: React.FC = () => {
 	return (
 		<div>
 			<h1>Settings</h1>
-			{message && (
-				<p style={{color: message.type === 'success' ? '#48bb78' : '#f56565'}}>
-					{message.text}
-				</p>
-			)}
+			{message && <p style={{color: message.type === 'success' ? '#48bb78' : '#f56565'}}>{message.text}</p>}
 
 			<section style={{marginBottom: '2rem', padding: '1rem', border: '1px solid #444', borderRadius: '8px'}}>
 				<h2>Theme</h2>
@@ -87,7 +87,14 @@ export const SettingsPage: React.FC = () => {
 						onClick={() => {
 							setTheme('light');
 						}}
-						style={{padding: '0.5rem 1rem', background: theme === 'light' ? '#646cff' : '#333', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer'}}
+						style={{
+							padding: '0.5rem 1rem',
+							background: theme === 'light' ? '#646cff' : '#333',
+							color: '#fff',
+							border: 'none',
+							borderRadius: '4px',
+							cursor: 'pointer',
+						}}
 					>
 						Light
 					</button>
@@ -95,7 +102,14 @@ export const SettingsPage: React.FC = () => {
 						onClick={() => {
 							setTheme('dark');
 						}}
-						style={{padding: '0.5rem 1rem', background: theme === 'dark' ? '#646cff' : '#333', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer'}}
+						style={{
+							padding: '0.5rem 1rem',
+							background: theme === 'dark' ? '#646cff' : '#333',
+							color: '#fff',
+							border: 'none',
+							borderRadius: '4px',
+							cursor: 'pointer',
+						}}
 					>
 						Dark
 					</button>
@@ -103,7 +117,14 @@ export const SettingsPage: React.FC = () => {
 						onClick={() => {
 							setTheme('system');
 						}}
-						style={{padding: '0.5rem 1rem', background: theme === 'system' ? '#646cff' : '#333', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer'}}
+						style={{
+							padding: '0.5rem 1rem',
+							background: theme === 'system' ? '#646cff' : '#333',
+							color: '#fff',
+							border: 'none',
+							borderRadius: '4px',
+							cursor: 'pointer',
+						}}
 					>
 						System Default
 					</button>
@@ -126,14 +147,19 @@ export const SettingsPage: React.FC = () => {
 							}}
 							style={{width: '100%', padding: '0.5rem', background: '#1a1a1a', color: '#fff', border: '1px solid #444', borderRadius: '4px'}}
 						/>
-						<small style={{color: '#888'}}>
-							1h = 60 minutes. Range: 1 to 1440 minutes.
-						</small>
+						<small style={{color: '#888'}}>1h = 60 minutes. Range: 1 to 1440 minutes.</small>
 					</div>
 					<button
 						type="submit"
 						disabled={mutation.isPending}
-						style={{padding: '0.75rem 1.5rem', background: '#646cff', color: '#fff', border: 'none', borderRadius: '4px', cursor: mutation.isPending ? 'not-allowed' : 'pointer'}}
+						style={{
+							padding: '0.75rem 1.5rem',
+							background: '#646cff',
+							color: '#fff',
+							border: 'none',
+							borderRadius: '4px',
+							cursor: mutation.isPending ? 'not-allowed' : 'pointer',
+						}}
 					>
 						{mutation.isPending ? 'Saving...' : 'Save Settings'}
 					</button>

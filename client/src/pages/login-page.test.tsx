@@ -11,7 +11,7 @@ describe('LoginPage', () => {
 				<MemoryRouter>
 					<LoginPage />
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
 		// Check for the heading explicitly
 		expect(screen.getByRole('heading', {name: /login/i})).toBeDefined();
@@ -25,14 +25,14 @@ describe('LoginPage', () => {
 				<MemoryRouter>
 					<LoginPage />
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
 		const userIn = screen.getByLabelText(/username/i) as HTMLInputElement;
 		const passIn = screen.getByLabelText(/password/i) as HTMLInputElement;
-		
+
 		fireEvent.change(userIn, {target: {value: 'testuser'}});
 		fireEvent.change(passIn, {target: {value: 'testpass'}});
-		
+
 		expect(userIn.value).toBe('testuser');
 		expect(passIn.value).toBe('testpass');
 	});
@@ -40,7 +40,7 @@ describe('LoginPage', () => {
 	it('shows error on failed login', async () => {
 		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
 			ok: false,
-			json: async () => ({error: 'Invalid credentials'})
+			json: async () => ({error: 'Invalid credentials'}),
 		} as Response);
 
 		render(
@@ -48,11 +48,11 @@ describe('LoginPage', () => {
 				<MemoryRouter>
 					<LoginPage />
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
-		
+
 		fireEvent.click(screen.getByRole('button', {name: /sign in/i}));
-		
+
 		await waitFor(() => {
 			expect(screen.getByText('Invalid credentials')).toBeDefined();
 		});
@@ -61,7 +61,7 @@ describe('LoginPage', () => {
 	it('handles failed login response without error message', async () => {
 		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
 			ok: false,
-			json: async () => ({})
+			json: async () => ({}),
 		} as Response);
 
 		render(
@@ -69,11 +69,11 @@ describe('LoginPage', () => {
 				<MemoryRouter>
 					<LoginPage />
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
-		
+
 		fireEvent.click(screen.getByRole('button', {name: /sign in/i}));
-		
+
 		await waitFor(() => {
 			expect(screen.getByText('Login failed')).toBeDefined();
 		});
@@ -87,11 +87,11 @@ describe('LoginPage', () => {
 				<MemoryRouter>
 					<LoginPage />
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
-		
+
 		fireEvent.click(screen.getByRole('button', {name: /sign in/i}));
-		
+
 		await waitFor(() => {
 			expect(screen.getByText('Unknown error')).toBeDefined();
 		});
@@ -100,7 +100,7 @@ describe('LoginPage', () => {
 	it('redirects on success', async () => {
 		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
 			ok: true,
-			json: async () => ({username: 'admin', fullName: 'Admin'})
+			json: async () => ({username: 'admin', fullName: 'Admin'}),
 		} as Response);
 
 		render(
@@ -111,11 +111,11 @@ describe('LoginPage', () => {
 						<Route path="/" element={<div>Home Dashboard</div>} />
 					</Routes>
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
-		
+
 		fireEvent.click(screen.getByRole('button', {name: /sign in/i}));
-		
+
 		await waitFor(() => {
 			expect(screen.getByText(/home dashboard/i)).toBeDefined();
 		});
@@ -124,7 +124,9 @@ describe('LoginPage', () => {
 	it('shows error on status not ok and no json', async () => {
 		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
 			ok: false,
-			json: async () => { throw new Error('parse error'); }
+			json: async () => {
+				throw new Error('parse error');
+			},
 		} as unknown as Response);
 
 		render(
@@ -132,11 +134,11 @@ describe('LoginPage', () => {
 				<MemoryRouter>
 					<LoginPage />
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
-		
+
 		fireEvent.click(screen.getByRole('button', {name: /sign in/i}));
-		
+
 		await waitFor(() => {
 			expect(screen.getByText('parse error')).toBeDefined();
 		});
@@ -145,7 +147,7 @@ describe('LoginPage', () => {
 	it('redirects to root when state is null', async () => {
 		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
 			ok: true,
-			json: async () => ({username: 'admin', fullName: 'Admin'})
+			json: async () => ({username: 'admin', fullName: 'Admin'}),
 		} as Response);
 
 		render(
@@ -156,11 +158,11 @@ describe('LoginPage', () => {
 						<Route path="/" element={<div>Root Page</div>} />
 					</Routes>
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
-		
+
 		fireEvent.click(screen.getByRole('button', {name: /sign in/i}));
-		
+
 		await waitFor(() => {
 			expect(screen.getByText(/root page/i)).toBeDefined();
 		});

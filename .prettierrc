@@ -1,7 +1,9 @@
 {
-	"useTabs": true,
-	"singleQuote": true,
-	"bracketSpacing": false,
-	"semi": true,
-	"trailingComma": "all"
+  'printWidth': 160,
+  'embeddedLanguageFormatting': 'off',
+  'useTabs': true,
+  'singleQuote': true,
+  'bracketSpacing': false,
+  'endOfLine': 'auto',
+  'overrides': [{'files': ['src/**/*.{scss,css}'], 'options': {'singleQuote': false}}],
 }

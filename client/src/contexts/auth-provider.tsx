@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import {useQueryClient} from '@tanstack/react-query';
-import type {ReactNode} from 'react';
 import {AuthContext} from './auth-context';
+import {UserSchema} from '../shared/schemas';
 import type {UserState} from './auth-context';
+
+const UserStateSchema = UserSchema.nullable();
 
 interface AuthProviderProps {
 	/** Children to be rendered. */
-	children: ReactNode;
+	children: React.ReactNode;
 }
 
 /**
@@ -20,14 +22,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 		const saved = localStorage.getItem('auth_user');
 		if (saved) {
 			try {
-				const parsed = JSON.parse(saved) as UserState;
-				return parsed ?? null;
+				const parsed = UserStateSchema.parse(JSON.parse(saved));
+				return parsed;
 			} catch {
 				// handled by null
 			}
 		}
 		return null;
 	});
+
 	const queryClient = useQueryClient();
 
 	const login = (userData: UserState) => {
@@ -43,9 +46,5 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
 	const isAuthenticated = user !== null;
 
-	return (
-		<AuthContext.Provider value={{user, isAuthenticated, login, logout}}>
-			{children}
-		</AuthContext.Provider>
-	);
+	return <AuthContext.Provider value={{user, isAuthenticated, login, logout}}>{children}</AuthContext.Provider>;
 };

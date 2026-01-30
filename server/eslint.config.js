@@ -31,10 +31,10 @@ export default tseslint.config(
 			},
 		},
 		rules: {
-			'indent': ['error', 'tab'],
+			indent: ['error', 'tab'],
 			'no-tabs': 'off',
-			'quotes': ['error', 'single'],
-			'semi': ['error', 'always'],
+			quotes: ['error', 'single'],
+			semi: ['error', 'always'],
 			'unicorn/prevent-abbreviations': 'off',
 			'unicorn/no-null': 'off',
 			'jsdoc/require-returns': 'off',

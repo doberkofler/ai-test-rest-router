@@ -35,20 +35,16 @@ app.get('/api/protected', (req, res) => {
 
 describe('Authentication System', () => {
 	it('Login with valid credentials sets cookie', async () => {
-		const res = await request(app)
-			.post('/api/auth/login')
-			.send({username: 'admin', password: 'secret'});
-		
+		const res = await request(app).post('/api/auth/login').send({username: 'admin', password: 'secret'});
+
 		expect(res.status).toBe(200);
 		expect(res.headers['set-cookie']).toBeDefined();
 		expect((res.body as {username: string}).username).toBe('admin');
 	});
 
 	it('Login with invalid credentials returns 401', async () => {
-		const res = await request(app)
-			.post('/api/auth/login')
-			.send({username: 'admin', password: 'wrong'});
-		
+		const res = await request(app).post('/api/auth/login').send({username: 'admin', password: 'wrong'});
+
 		expect(res.status).toBe(401);
 	});
 
@@ -58,17 +54,13 @@ describe('Authentication System', () => {
 	});
 
 	it('Access protected route with valid cookie returns 200', async () => {
-		const loginRes = await request(app)
-			.post('/api/auth/login')
-			.send({username: 'admin', password: 'secret'});
-		
+		const loginRes = await request(app).post('/api/auth/login').send({username: 'admin', password: 'secret'});
+
 		const cookie = loginRes.headers['set-cookie'];
 		if (!cookie) throw new Error('No cookie returned');
 
-		const res = await request(app)
-			.get('/api/protected')
-			.set('Cookie', cookie);
-		
+		const res = await request(app).get('/api/protected').set('Cookie', cookie);
+
 		expect(res.status).toBe(200);
 		expect((res.body as {ok: boolean}).ok).toBe(true);
 	});

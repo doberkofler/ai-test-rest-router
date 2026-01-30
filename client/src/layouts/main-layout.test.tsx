@@ -8,7 +8,7 @@ describe('MainLayout', () => {
 	it('handles logout', async () => {
 		const logoutSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
 			ok: true,
-			json: async () => ({status: 'ok'})
+			json: async () => ({status: 'ok'}),
 		} as Response);
 
 		render(
@@ -16,7 +16,7 @@ describe('MainLayout', () => {
 				<MemoryRouter>
 					<MainLayout />
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
 
 		const logoutBtn = screen.getByRole('button', {name: /logout/i});
@@ -35,7 +35,7 @@ describe('MainLayout', () => {
 				<MemoryRouter>
 					<MainLayout />
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
 
 		const logoutBtn = screen.getByRole('button', {name: /logout/i});
@@ -52,10 +52,10 @@ describe('MainLayout', () => {
 				<MemoryRouter initialEntries={['/']}>
 					<MainLayout />
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
-		
-		const homeLink = screen.getByRole('link', { name: /home/i });
+
+		const homeLink = screen.getByRole('link', {name: /home/i});
 		expect(homeLink.className).toContain('active');
 	});
 
@@ -65,10 +65,10 @@ describe('MainLayout', () => {
 				<MemoryRouter initialEntries={['/about']}>
 					<MainLayout />
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
-		
-		const aboutLink = screen.getByRole('link', { name: /about/i });
+
+		const aboutLink = screen.getByRole('link', {name: /about/i});
 		expect(aboutLink.className).toContain('active');
 	});
 
@@ -78,10 +78,10 @@ describe('MainLayout', () => {
 				<MemoryRouter initialEntries={['/settings']}>
 					<MainLayout />
 				</MemoryRouter>
-			</TestWrapper>
+			</TestWrapper>,
 		);
-		
-		const settingsLink = screen.getByRole('link', { name: /settings/i });
+
+		const settingsLink = screen.getByRole('link', {name: /settings/i});
 		expect(settingsLink.className).toContain('active');
 	});
 });

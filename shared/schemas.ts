@@ -20,11 +20,13 @@ export const ServerInfoSchema = z.object({
 	serverTime: z.string().datetime(),
 	nodeVersion: z.string(),
 	expressVersion: z.string(),
-	user: z.object({
-		username: z.string(),
-		fullName: z.string(),
-		loginTimestamp: z.string().datetime(),
-	}).nullable(),
+	user: z
+		.object({
+			username: z.string(),
+			fullName: z.string(),
+			loginTimestamp: z.string().datetime(),
+		})
+		.nullable(),
 });
 
 export type User = z.infer<typeof UserSchema>;

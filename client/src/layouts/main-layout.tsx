@@ -41,25 +41,40 @@ export const MainLayout: React.FC = () => {
 				<nav style={{flex: 1}}>
 					<ul>
 						<li>
-							<NavLink to="/" className={({isActive}) => (isActive ? 'active' : '')}>Home</NavLink>
+							<NavLink to="/" className={({isActive}) => (isActive ? 'active' : '')}>
+								Home
+							</NavLink>
 						</li>
 						<li>
-							<NavLink to="/about" className={({isActive}) => (isActive ? 'active' : '')}>About</NavLink>
+							<NavLink to="/about" className={({isActive}) => (isActive ? 'active' : '')}>
+								About
+							</NavLink>
 						</li>
 						<li>
-							<NavLink to="/settings" className={({isActive}) => (isActive ? 'active' : '')}>Settings</NavLink>
+							<NavLink to="/settings" className={({isActive}) => (isActive ? 'active' : '')}>
+								Settings
+							</NavLink>
 						</li>
 					</ul>
 				</nav>
 				<div style={{display: 'flex', gap: '0.5rem', marginTop: 'auto'}}>
-					<button 
+					<button
 						onClick={toggleTheme}
 						title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-						style={{flex: 1, padding: '0.75rem', background: '#646cff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '1rem'}}
+						style={{
+							flex: 1,
+							padding: '0.75rem',
+							background: '#646cff',
+							color: '#fff',
+							border: 'none',
+							borderRadius: '4px',
+							cursor: 'pointer',
+							fontSize: '1rem',
+						}}
 					>
 						{themeIcon}
 					</button>
-					<button 
+					<button
 						onClick={handleLogout}
 						style={{flex: 1, padding: '0.75rem', background: '#e53e3e', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer'}}
 					>

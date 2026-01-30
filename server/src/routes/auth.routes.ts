@@ -10,7 +10,7 @@ router.post('/login', function login(req, res) {
 		const credentials = LoginSchema.parse(req.body);
 		const users = configService.getUsers();
 
-		const user = users.find(u => u.username === credentials.username && u.password === credentials.password);
+		const user = users.find((u) => u.username === credentials.username && u.password === credentials.password);
 		if (user) {
 			const sid = sessionService.createSession(user.username, user.fullName);
 
@@ -27,7 +27,7 @@ router.post('/login', function login(req, res) {
 			});
 			return;
 		}
-		
+
 		res.status(401).json({error: 'Invalid credentials'});
 	} catch {
 		res.status(400).json({error: 'Bad request'});

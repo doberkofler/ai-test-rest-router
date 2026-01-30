@@ -36,16 +36,20 @@ export async function createApp() {
 	app.set('EXPRESS_VERSION', expressVersion);
 
 	// Middleware
-	app.use(helmet({
-		contentSecurityPolicy: false,
-	}));
-	app.use(cors({
-		origin: 'http://localhost:5173',
-		credentials: true,
-	}));
+	app.use(
+		helmet({
+			contentSecurityPolicy: false,
+		}),
+	);
+	app.use(
+		cors({
+			origin: 'http://localhost:5173',
+			credentials: true,
+		}),
+	);
 	app.use(json());
 	app.use(cookieParser());
-	
+
 	// Structured logging with morgan
 	app.use(morgan('combined'));
 

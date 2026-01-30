@@ -58,9 +58,7 @@ export const AboutPage: React.FC = () => {
 
 			<section>
 				<h2>Server Information</h2>
-				{error instanceof Error && (
-					<p style={{color: 'red'}}>Error: {error.message}</p>
-				)}
+				{error instanceof Error && <p style={{color: 'red'}}>Error: {error.message}</p>}
 				{isLoading ? (
 					<p>Loading server info...</p>
 				) : (

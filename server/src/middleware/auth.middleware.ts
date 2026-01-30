@@ -43,6 +43,7 @@ export const authGuard = (req: Request, res: Response, next: NextFunction) => {
 	}
 
 	sessionService.updateActivity(sid);
+	// WHY: Express Request doesn't include custom session/sid properties; narrowing to AuthRequest.
 	const authReq = req as AuthRequest;
 	authReq.session = session;
 	authReq.sid = sid;

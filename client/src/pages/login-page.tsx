@@ -3,10 +3,16 @@ import {useAuth} from '../contexts/auth-context';
 import {useThemeContext} from '../contexts/theme-provider';
 import {useNavigate, useLocation} from 'react-router-dom';
 
-interface LoginData {
-	username: string;
-	fullName: string;
-}
+import {z} from 'zod';
+
+const LoginResponseSchema = z.object({
+	username: z.string(),
+	fullName: z.string(),
+});
+
+const ErrorResponseSchema = z.object({
+	error: z.string().optional(),
+});
 
 /**
  * Login page component.
@@ -21,6 +27,7 @@ export const LoginPage: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	// WHY: useLocation().state is typed as any; narrowing to expected structure for redirect logic.
 	const state = location.state as {from?: {pathname: string}} | null;
 	const from = state?.from?.pathname ?? '/';
 
@@ -35,10 +42,11 @@ export const LoginPage: React.FC = () => {
 			credentials: 'include',
 		})
 			.then(async (res) => {
+				const json: unknown = await res.json();
 				if (res.ok) {
-					return res.json() as Promise<LoginData>;
+					return LoginResponseSchema.parse(json);
 				}
-				const data = await res.json() as {error?: string};
+				const data = ErrorResponseSchema.parse(json);
 				throw new Error(data.error ?? 'Login failed');
 			})
 			.then((user) => {
@@ -75,19 +83,51 @@ export const LoginPage: React.FC = () => {
 	const themeButtonColor = isDark ? '#fff' : '#000';
 
 	return (
-		<div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', background: isDark ? '#1a1a1a' : '#ffffff'}}>
-			<button 
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center',
+				height: '100vh',
+				background: isDark ? '#1a1a1a' : '#ffffff',
+			}}
+		>
+			<button
 				onClick={toggleTheme}
 				title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-				style={{position: 'absolute', top: '1rem', right: '1rem', padding: '0.5rem 1rem', background: themeButtonBg, color: themeButtonColor, border: `1px solid ${inputBorder}`, borderRadius: '4px', cursor: 'pointer', fontSize: '1.2rem'}}
+				style={{
+					position: 'absolute',
+					top: '1rem',
+					right: '1rem',
+					padding: '0.5rem 1rem',
+					background: themeButtonBg,
+					color: themeButtonColor,
+					border: `1px solid ${inputBorder}`,
+					borderRadius: '4px',
+					cursor: 'pointer',
+					fontSize: '1.2rem',
+				}}
 			>
 				{themeIcon}
 			</button>
-			<form onSubmit={handleSubmit} style={{padding: '2rem', border: `1px solid ${containerBorder}`, borderRadius: '8px', background: containerBg, minWidth: '300px', boxShadow: isDark ? '0 4px 6px rgba(0, 0, 0, 0.5)' : '0 2px 4px rgba(0, 0, 0, 0.1)'}}>
+			<form
+				onSubmit={handleSubmit}
+				style={{
+					padding: '2rem',
+					border: `1px solid ${containerBorder}`,
+					borderRadius: '8px',
+					background: containerBg,
+					minWidth: '300px',
+					boxShadow: isDark ? '0 4px 6px rgba(0, 0, 0, 0.5)' : '0 2px 4px rgba(0, 0, 0, 0.1)',
+				}}
+			>
 				<h2 style={{color: labelColor, marginBottom: '1.5rem', textAlign: 'center'}}>Login</h2>
 				{error ? <p style={{color: errorColor, marginBottom: '1rem', textAlign: 'center'}}>{error}</p> : null}
 				<div style={{marginBottom: '1rem'}}>
-					<label htmlFor="username" style={{display: 'block', color: labelColor, marginBottom: '0.5rem', fontWeight: '500'}}>Username</label>
+					<label htmlFor="username" style={{display: 'block', color: labelColor, marginBottom: '0.5rem', fontWeight: '500'}}>
+						Username
+					</label>
 					<input
 						id="username"
 						type="text"
@@ -95,11 +135,22 @@ export const LoginPage: React.FC = () => {
 						onChange={(e) => {
 							setUsername(e.target.value);
 						}}
-						style={{width: '100%', padding: '0.75rem', background: inputBg, color: inputColor, border: `1px solid ${inputBorder}`, borderRadius: '4px', boxSizing: 'border-box', fontSize: '1rem'}}
+						style={{
+							width: '100%',
+							padding: '0.75rem',
+							background: inputBg,
+							color: inputColor,
+							border: `1px solid ${inputBorder}`,
+							borderRadius: '4px',
+							boxSizing: 'border-box',
+							fontSize: '1rem',
+						}}
 					/>
 				</div>
 				<div style={{marginBottom: '1.5rem'}}>
-					<label htmlFor="password" style={{display: 'block', color: labelColor, marginBottom: '0.5rem', fontWeight: '500'}}>Password</label>
+					<label htmlFor="password" style={{display: 'block', color: labelColor, marginBottom: '0.5rem', fontWeight: '500'}}>
+						Password
+					</label>
 					<input
 						id="password"
 						type="password"
@@ -107,10 +158,33 @@ export const LoginPage: React.FC = () => {
 						onChange={(e) => {
 							setPassword(e.target.value);
 						}}
-						style={{width: '100%', padding: '0.75rem', background: inputBg, color: inputColor, border: `1px solid ${inputBorder}`, borderRadius: '4px', boxSizing: 'border-box', fontSize: '1rem'}}
+						style={{
+							width: '100%',
+							padding: '0.75rem',
+							background: inputBg,
+							color: inputColor,
+							border: `1px solid ${inputBorder}`,
+							borderRadius: '4px',
+							boxSizing: 'border-box',
+							fontSize: '1rem',
+						}}
 					/>
 				</div>
-				<button type="submit" style={{width: '100%', padding: '0.75rem', background: buttonBg, color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '1rem', fontWeight: '500', transition: 'background-color 0.2s'}}>
+				<button
+					type="submit"
+					style={{
+						width: '100%',
+						padding: '0.75rem',
+						background: buttonBg,
+						color: '#fff',
+						border: 'none',
+						borderRadius: '4px',
+						cursor: 'pointer',
+						fontSize: '1rem',
+						fontWeight: '500',
+						transition: 'background-color 0.2s',
+					}}
+				>
 					Sign In
 				</button>
 			</form>

@@ -38,7 +38,31 @@
 - Explicitly surface all detected ambiguity or type unsafety
 - Use markdown headings (##) to structure longer responses
 - Any data that is "external" (retrieved from backend or any external source) must be strictly type checked using zod.
-- Use `@tanstack/react-query` to retrieve data.
+- Use `fetch` foe http requests.
+- Use `@tanstack/react-query` to retrieve data in react applications.
+
+## Prettier
+
+Use `prettier` with the following settings.
+
+```json
+{
+	"printWidth": 160,
+	"embeddedLanguageFormatting": "off",
+	"useTabs": true,
+	"singleQuote": true,
+	"bracketSpacing": false,
+	"endOfLine": "auto",
+	"overrides": [
+		{
+			"files": ["src/**/*.{scss,css}"],
+			"options": {
+				"singleQuote": false
+			}
+		}
+	]
+}
+```
 
 ## Typescript
 - Use semicolons, named exports, async/await, null checks, avoid `any`, use type guards, use jsdoc
@@ -47,10 +71,12 @@
 - Target ES2022 and NodeJS 24
 - Strict null checks enforced
 - Prefer type to interface
+- Restrict the use of `as` type assertion to the bare minimum and rather check the type using `zod` whenever possible. If a type assrtiin must be used a comment should explain why this is absolutely needed.
 - Strict TypeScript & eslint
 
 ## Eslint
 - Use strictest possible lint rules
+- Try no to use any inline rule disabling and if so explain in a comment why the rule must be disabled
 - Use typescript-esling `strictTypeChecked` and `stylisticTypeChecked`
 - Use `eslint-plugin-import-x`
 - Use `eslint-plugin-jsdoc`

@@ -16,9 +16,7 @@ export const TestWrapper: React.FC<{children: ReactNode}> = ({children}) => {
 	return (
 		<ThemeProvider>
 			<QueryClientProvider client={queryClient}>
-				<AuthProvider>
-					{children}
-				</AuthProvider>
+				<AuthProvider>{children}</AuthProvider>
 			</QueryClientProvider>
 		</ThemeProvider>
 	);

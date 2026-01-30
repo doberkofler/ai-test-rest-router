@@ -25,7 +25,7 @@ class ConfigService {
 		try {
 			const optionsData = await this.readLocalFile(new URL('../../data/options.json', import.meta.url));
 			this.options = OptionsSchema.parse(JSON.parse(optionsData));
-			
+
 			const usersData = await this.readLocalFile(new URL('../../data/users.json', import.meta.url));
 			this.users = UserSchema.array().parse(JSON.parse(usersData));
 		} catch (error) {
@@ -48,11 +48,7 @@ class ConfigService {
 	 */
 	async updateOptions(newOptions: Options) {
 		this.options = OptionsSchema.parse(newOptions);
-		await writeFile(
-			new URL('../../data/options.json', import.meta.url),
-			JSON.stringify(this.options, null, '\t'),
-			'utf8'
-		);
+		await writeFile(new URL('../../data/options.json', import.meta.url), JSON.stringify(this.options, null, '\t'), 'utf8');
 	}
 
 	/**
