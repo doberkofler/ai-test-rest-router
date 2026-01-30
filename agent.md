@@ -1,19 +1,3 @@
-## Project goal
-
-Create a basic web application that demonstrates how to build a modern SPA using:
-- react and react-router on the frontend
-- express on the backend
-
-The client should offer three pages accessible via the router using a side menu.
-
-## Status: Implemented
-- **Frontend**: React + Vite, react-router-dom v7, @tanstack/react-query, zod
-- **Backend**: Express (Node 24, ES2022, native TypeScript execution, `node --watch`)
-- **Deployment**: Static middleware with regex SPA fallback in Express
-- **State**: Native React state & TanStack Query
-- **Testing**: Vitest (Browser/Playwright) for frontend, Node native test for backend
-- **Ports**: 3001 (Server), 5173 (Client)
-
 ## AI Behavioral Configuration
 
 ### Persona
@@ -86,6 +70,7 @@ The client should offer three pages accessible via the router using a side menu.
 - Node.js v24.x.
 - TypeScript executes natively in Node without flags, loaders, or transpilation steps.
 - No ts-node, tsx, babel, swc, or build phase.
+- Use Vitest for backend testing.
 
 ### Execution model:
 - Use native Node.js watch mode: `node --watch`.
@@ -101,4 +86,3 @@ The client should offer three pages accessible via the router using a side menu.
 ### Output expectations:
 - Provide commands, code, and config compatible with the above assumptions.
 - Do not suggest compilation, bundling, or alternative runtimes.
-
