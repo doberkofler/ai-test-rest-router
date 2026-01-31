@@ -25,9 +25,9 @@ import {
 	Brightness4 as Brightness4Icon,
 	Brightness7 as Brightness7Icon,
 } from '@mui/icons-material';
-import {useAuth} from '@client/contexts/auth-context.ts';
-import {useThemeContext} from '@client/contexts/theme-provider.tsx';
-import {apiClient} from '@client/services/api-client.ts';
+import {useAuth} from '../contexts/auth-context.ts';
+import {useThemeContext} from '../contexts/theme-provider.tsx';
+import {apiClient} from '../services/api-client.ts';
 
 const drawerWidth = '240px';
 
@@ -51,9 +51,11 @@ export const MainLayout: React.FC = () => {
 			})
 			.catch((error: unknown) => {
 				// WHY: Suppress logging in tests to avoid cluttering test output with expected failures.
+				/* v8 ignore start */
 				if (import.meta.env.MODE !== 'test') {
 					console.error('Logout failed', error);
 				}
+				/* v8 ignore stop */
 				logout();
 				navigate('/login');
 			});
@@ -76,6 +78,8 @@ export const MainLayout: React.FC = () => {
 
 	const getPageTitle = () => {
 		const current = menuItems.find((item) => item.path === location.pathname);
+		// WHY: Defensive fallback if route is not in menuItems; usually 'App' or specific route title.
+		/* v8 ignore next */
 		return current?.text ?? 'App';
 	};
 

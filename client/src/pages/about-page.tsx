@@ -3,7 +3,7 @@ import {useQuery} from '@tanstack/react-query';
 import {ServerInfoSchema} from '@shared/logic';
 import type {ServerInfo} from '@shared/logic';
 import {Typography, Box, Paper, List, ListItem, ListItemText, Divider, Alert, CircularProgress} from '@mui/material';
-import {apiClient} from '@client/services/api-client.ts';
+import {apiClient} from '../services/api-client.ts';
 
 /**
  * Fetches server information using the centralized ApiClient.
@@ -47,6 +47,70 @@ export const AboutPage: React.FC = () => {
 		};
 	}, []);
 
+	const renderServerInfo = () => {
+		if (isLoading) {
+			return (
+				<Box sx={{display: 'flex', justifyContent: 'center', p: 2}}>
+					<CircularProgress size={24} />
+				</Box>
+			);
+		}
+		if (error) {
+			return <Alert severity="error">Failed to load server information</Alert>;
+		}
+		if (serverInfo) {
+			return (
+				<List dense>
+					<ListItem>
+						<ListItemText primary="Start Timestamp" secondary={formatDate(serverInfo.startTimestamp)} />
+					</ListItem>
+					<ListItem>
+						<ListItemText primary="Current Time" secondary={formatDate(serverInfo.serverTime)} />
+					</ListItem>
+					<ListItem>
+						<ListItemText primary="Node Version" secondary={serverInfo.nodeVersion} />
+					</ListItem>
+					<ListItem>
+						<ListItemText primary="Express Version" secondary={serverInfo.expressVersion} />
+					</ListItem>
+				</List>
+			);
+		}
+		return null;
+	};
+
+	const renderSessionInfo = () => {
+		if (isLoading) {
+			return (
+				<Box sx={{display: 'flex', justifyContent: 'center', p: 2}}>
+					<CircularProgress size={24} />
+				</Box>
+			);
+		}
+		if (serverInfo?.user) {
+			return (
+				<List dense>
+					<ListItem>
+						<ListItemText primary="User Code" secondary={serverInfo.user.username} />
+					</ListItem>
+					<ListItem>
+						<ListItemText primary="Full Name" secondary={serverInfo.user.fullName} />
+					</ListItem>
+					<ListItem>
+						<ListItemText primary="Session Created" secondary={formatDate(serverInfo.user.loginTimestamp)} />
+					</ListItem>
+				</List>
+			);
+		}
+		return (
+			<Box sx={{p: 2}}>
+				<Typography variant="body2" color="text.secondary">
+					Not authenticated
+				</Typography>
+			</Box>
+		);
+	};
+
 	return (
 		<Box>
 			<Typography variant="h4" gutterBottom>
@@ -83,28 +147,7 @@ export const AboutPage: React.FC = () => {
 						Server Information
 					</Typography>
 					<Divider />
-					{isLoading ? (
-						<Box sx={{display: 'flex', justifyContent: 'center', p: 2}}>
-							<CircularProgress size={24} />
-						</Box>
-					) : (
-						serverInfo && (
-							<List dense>
-								<ListItem>
-									<ListItemText primary="Start Timestamp" secondary={formatDate(serverInfo.startTimestamp)} />
-								</ListItem>
-								<ListItem>
-									<ListItemText primary="Current Time" secondary={formatDate(serverInfo.serverTime)} />
-								</ListItem>
-								<ListItem>
-									<ListItemText primary="Node Version" secondary={serverInfo.nodeVersion} />
-								</ListItem>
-								<ListItem>
-									<ListItemText primary="Express Version" secondary={serverInfo.expressVersion} />
-								</ListItem>
-							</List>
-						)
-					)}
+					{renderServerInfo()}
 				</Paper>
 
 				<Paper sx={{p: 2, flex: '1 1 300px'}}>
@@ -112,25 +155,7 @@ export const AboutPage: React.FC = () => {
 						Session Information
 					</Typography>
 					<Divider />
-					{isLoading ? (
-						<Box sx={{display: 'flex', justifyContent: 'center', p: 2}}>
-							<CircularProgress size={24} />
-						</Box>
-					) : (
-						serverInfo?.user && (
-							<List dense>
-								<ListItem>
-									<ListItemText primary="User Code" secondary={serverInfo.user.username} />
-								</ListItem>
-								<ListItem>
-									<ListItemText primary="Full Name" secondary={serverInfo.user.fullName} />
-								</ListItem>
-								<ListItem>
-									<ListItemText primary="Session Created" secondary={formatDate(serverInfo.user.loginTimestamp)} />
-								</ListItem>
-							</List>
-						)
-					)}
+					{renderSessionInfo()}
 				</Paper>
 			</Box>
 		</Box>

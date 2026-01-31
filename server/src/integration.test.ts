@@ -79,21 +79,17 @@ describe('Modular Server API - Detailed', () => {
 
 		const cookie = loginRes.get('Set-Cookie') ?? [];
 
-		// Advance time beyond 1 hour
-		// WHY: sessionTimeoutMinutes defaults to 60.
-		// Since fake timers don't seem to propagate through supertest/express middleware correctly here,
-		// we'll skip this specific test path for now and focus on other gaps,
-		// or use a more direct approach if needed.
-		// For now, let's just bypass the failing assertion to see the coverage.
-		/*
-		const twoHoursLater = Date.now() + 120 * 60 * 1000;
-		vi.setSystemTime(twoHoursLater);
+		// Mock config to have 0 timeout for immediate expiration
+		vi.spyOn(configService, 'getOptions').mockReturnValue({
+			sessionTimeoutMinutes: -1,
+		});
 
 		const response = await request(app).get(`${API_BASE}/info`).set('Cookie', cookie);
 
 		expect(response.status).toBe(401);
 		expect((response.body as {error: string}).error).toBe('Session timed out');
-		*/
+
+		vi.restoreAllMocks();
 	});
 
 	it(`POST ${API_BASE}/options updates timeout`, async () => {
@@ -157,8 +153,51 @@ describe('Modular Server API - Detailed', () => {
 		expect(response.header['content-type']).toContain('text/html');
 	});
 
-	it('ConfigService loadConfig handles failure', async () => {
-		vi.spyOn(configService, 'readLocalFile').mockRejectedValue(new Error('fail'));
-		await expect(configService.loadConfig()).rejects.toThrow('fail');
+	it(`GET ${API_BASE}/info handles missing session properties gracefully`, async () => {
+		const app = await createApp();
+		const loginRes = await request(app).post(`${API_BASE}/auth/login`).send({username: 'admin', password: 'secret'});
+		const cookie = loginRes.get('Set-Cookie') ?? [];
+
+		// Manually corrupt the session in the service to trigger fallback branches in api.routes.ts:25-27
+		const firstCookie = cookie[0] ?? '';
+		const sidMatch = firstCookie.split(';')[0]?.split('=')[1];
+		const sid = sidMatch ?? '';
+		const session = sessionService.getSession(sid);
+		if (session) {
+			(session as any).username = undefined;
+			(session as any).fullName = undefined;
+			(session as any).loginTimestamp = undefined;
+		}
+
+		const response = await request(app).get(`${API_BASE}/info`).set('Cookie', cookie);
+		expect(response.status).toBe(200);
+		expect(response.body.user.username).toBe('');
+	});
+
+	it(`GET ${API_BASE}/options returns current settings`, async () => {
+		const app = await createApp();
+		const loginRes = await request(app).post(`${API_BASE}/auth/login`).send({username: 'admin', password: 'secret'});
+		const cookie = loginRes.get('Set-Cookie') ?? [];
+
+		const response = await request(app).get(`${API_BASE}/options`).set('Cookie', cookie);
+		expect(response.status).toBe(200);
+		expect(response.body).toHaveProperty('sessionTimeoutMinutes');
+	});
+
+	it('ConfigService loadConfig handles failure and rethrows', async () => {
+		vi.spyOn(configService, 'readLocalFile').mockRejectedValue(new Error('Load failure'));
+		await expect(configService.loadConfig()).rejects.toThrow('Load failure');
+		vi.restoreAllMocks();
+	});
+
+	it('ConfigService getExpressVersion handles valid and invalid paths', async () => {
+		const validPath = new URL('../package.json', import.meta.url);
+		const version = await configService.getExpressVersion(validPath);
+		expect(version).toBeDefined();
+		expect(version).not.toBe('unknown');
+
+		const invalidPath = new URL('non-existent.json', import.meta.url);
+		const unknownVersion = await configService.getExpressVersion(invalidPath);
+		expect(unknownVersion).toBe('unknown');
 	});
 });

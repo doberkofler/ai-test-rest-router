@@ -14,7 +14,7 @@ export default defineConfig({
 				branches: 55,
 				statements: 80,
 			},
-			exclude: ['src/**/*.test.ts', 'dist/**', 'src/session-cleanup.test.ts'],
+			exclude: ['src/**/*.test.ts', 'dist/**'],
 		},
 	},
 });

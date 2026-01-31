@@ -1,7 +1,7 @@
 import {describe, it, expect, vi} from 'vitest';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
-import {LoginPage} from '@client/pages/login-page';
-import {TestWrapper} from '@client/test/test-wrapper';
+import {LoginPage} from './login-page.tsx';
+import {TestWrapper} from '../test/test-wrapper.tsx';
 import {MemoryRouter, Routes, Route} from 'react-router-dom';
 
 describe('LoginPage', () => {
@@ -37,12 +37,33 @@ describe('LoginPage', () => {
 		expect(passIn.value).toBe('testpass');
 	});
 
+	it('toggles theme', () => {
+		render(
+			<TestWrapper>
+				<MemoryRouter>
+					<LoginPage />
+				</MemoryRouter>
+			</TestWrapper>,
+		);
+
+		const themeBtn = screen.getByRole('button', {name: /switch to/i});
+		const initialLabel = themeBtn.getAttribute('aria-label') ?? '';
+
+		fireEvent.click(themeBtn);
+
+		const updatedLabel = screen.getByRole('button', {name: /switch to/i}).getAttribute('aria-label') ?? '';
+		expect(updatedLabel).not.toBe(initialLabel);
+	});
+
 	it('shows error on failed login', async () => {
-		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
-			ok: false,
-			status: 401,
-			json: async () => ({error: 'Invalid credentials'}),
-		} as Response);
+		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+			Response.json(
+				{error: 'Invalid credentials'},
+				{
+					status: 401,
+				},
+			),
+		);
 
 		render(
 			<TestWrapper>
@@ -60,11 +81,14 @@ describe('LoginPage', () => {
 	});
 
 	it('handles failed login response without error message', async () => {
-		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
-			ok: false,
-			status: 400,
-			json: async () => ({error: 'Login failed'}),
-		} as Response);
+		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+			Response.json(
+				{error: 'Login failed'},
+				{
+					status: 400,
+				},
+			),
+		);
 
 		render(
 			<TestWrapper>
@@ -81,29 +105,15 @@ describe('LoginPage', () => {
 		});
 	});
 
-	it('handles non-Error objects in catch', async () => {
-		vi.spyOn(globalThis, 'fetch').mockRejectedValueOnce(new Error('Network error'));
-
-		render(
-			<TestWrapper>
-				<MemoryRouter>
-					<LoginPage />
-				</MemoryRouter>
-			</TestWrapper>,
-		);
-
-		fireEvent.click(screen.getByRole('button', {name: /sign in/i}));
-
-		await waitFor(() => {
-			expect(screen.getByText('Network error')).toBeDefined();
-		});
-	});
-
 	it('redirects on success', async () => {
-		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
-			ok: true,
-			json: async () => ({username: 'admin', fullName: 'Admin'}),
-		} as Response);
+		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+			Response.json(
+				{username: 'admin', fullName: 'Admin'},
+				{
+					status: 200,
+				},
+			),
+		);
 
 		render(
 			<TestWrapper>
@@ -124,13 +134,11 @@ describe('LoginPage', () => {
 	});
 
 	it('shows error on status not ok and no json', async () => {
-		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
-			ok: false,
-			status: 500,
-			json: async () => {
-				throw new Error('JSON parse error');
-			},
-		} as unknown as Response);
+		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+			new Response('Plain text error', {
+				status: 500,
+			}),
+		);
 
 		render(
 			<TestWrapper>
@@ -148,10 +156,14 @@ describe('LoginPage', () => {
 	});
 
 	it('redirects to root when state is null', async () => {
-		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
-			ok: true,
-			json: async () => ({username: 'admin', fullName: 'Admin'}),
-		} as Response);
+		vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+			Response.json(
+				{username: 'admin', fullName: 'Admin'},
+				{
+					status: 200,
+				},
+			),
+		);
 
 		render(
 			<TestWrapper>

@@ -2,6 +2,8 @@
 
 Always keep this file updated when the project changes.
 
+- **ASCII Tables**: All ASCII tables generated in communication or documentation MUST be readable, properly aligned, and well-formatted.
+
 ## 🛠 Build, Lint, & Test Commands
 
 ### Root Workspace (NPM Workspaces)
@@ -99,3 +101,15 @@ Always keep this file updated when the project changes.
 ## 🔍 Validation Protocol
 1. **Ambiguity**: Stop and ask if requirements are unclear.
 2. **Docs**: Only ISO, RFC, W3C, ECMA, and official vendor docs are authoritative.
+3. **Mandatory CI**: `npm run ci` **MUST** be executed and pass before declaring any task complete. No exceptions.
+4. **Mandatory File Verification**: After **EVERY** file modification, the agent **MUST** execute the following sequence using **relative paths**:
+    - **Lint**: `npx eslint [relative_file_path]`
+    - **Type Check**: `npx tsc --noEmit` (within the affected workspace)
+    - **Format**: `npx prettier --write [relative_file_path]`
+    - **Test (Mandatory for test files)**: `npm run test -w [workspace] -- [relative_test_file_path]`
+5. **Performance & Hangs**:
+    - **Baseline First**: Before changing configurations (parallelism, providers), establish a baseline by timing individual tests.
+    - **Isolation**: Run test files/components one-by-one to pinpoint the exact bottleneck.
+    - **Time-boxing**: Any individual unit test taking > 30s is "Broken," not "Slow." Kill it and fix the root cause.
+    - **No Guessing**: Do not modify global `vite.config.ts` or `tsconfig.json` settings based on assumptions about performance without delta measurements.
+    - **Unreachable Code**: Exclude unreachable code (defensive throws, environment-specific logging, and legacy browser guards) using inline `/* v8 ignore ... */` comments. Coverage goals (100% Server/Shared, 90% Client) apply to the reachable code base. All exclusions MUST be explained with a comment directly above the ignore statement.

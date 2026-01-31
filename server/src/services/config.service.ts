@@ -29,7 +29,12 @@ class ConfigService {
 			const usersData = await this.readLocalFile(new URL('../../data/users.json', import.meta.url));
 			this.users = UserSchema.array().parse(JSON.parse(usersData));
 		} catch (error) {
-			console.error('Failed to load configuration', error);
+			// WHY: Log failure to load persistent data; suppressed in tests to avoid clutter.
+			/* v8 ignore start */
+			if (process.env['NODE_ENV'] !== 'test') {
+				console.error('Failed to load configuration', error);
+			}
+			/* v8 ignore stop */
 			throw error;
 		}
 	}
@@ -57,6 +62,21 @@ class ConfigService {
 	 */
 	getUsers(): User[] {
 		return this.users;
+	}
+
+	/**
+	 * Loads express version from node_modules.
+	 * @param path - URL to package.json.
+	 * @returns Version string.
+	 */
+	async getExpressVersion(path: URL) {
+		try {
+			const data = await this.readLocalFile(path);
+			const pkg = JSON.parse(data) as {version: string};
+			return pkg.version;
+		} catch {
+			return 'unknown';
+		}
 	}
 }
 

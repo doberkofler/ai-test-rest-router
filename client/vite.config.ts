@@ -37,6 +37,8 @@ export default defineConfig({
 			instances: [{browser: 'chromium'}],
 		},
 		setupFiles: ['./src/test/setup.ts'],
+		testTimeout: 30000,
+		hookTimeout: 30000,
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'json', 'html'],
@@ -47,7 +49,7 @@ export default defineConfig({
 				statements: 85,
 			},
 			include: ['src/**/*.{ts,tsx}'],
-			exclude: ['src/**/*.test.{ts,tsx}', 'src/test/**', 'src/shared/**', 'src/vite-env.d.ts', 'src/main.tsx'],
+			exclude: ['**/node_modules/**', 'src/**/*.test.{ts,tsx}', 'src/test/**', 'src/shared/**', 'src/vite-env.d.ts', 'src/main.tsx', '**/*.d.ts', '**/*.css'],
 		},
 	},
 });

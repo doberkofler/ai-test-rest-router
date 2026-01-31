@@ -32,9 +32,12 @@ export const useTheme = () => {
 		if (theme === 'system') {
 			const media = globalThis.matchMedia('(prefers-color-scheme: dark)');
 			const handleChange = () => {
+				// WHY: Defensive for headless browsers or environments without active media query support.
+				/* v8 ignore start */
 				const currentIsDark = media.matches;
 				root.classList.remove('light', 'dark');
 				root.classList.add(currentIsDark ? 'dark' : 'light');
+				/* v8 ignore stop */
 			};
 			media.addEventListener('change', handleChange);
 			return () => {

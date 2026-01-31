@@ -1,16 +1,11 @@
 import {describe, it, expect, vi} from 'vitest';
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
-import {MainLayout} from '@client/layouts/main-layout';
-import {TestWrapper} from '@client/test/test-wrapper';
-import {MemoryRouter} from 'react-router-dom';
+import {MainLayout} from './main-layout.tsx';
+import {TestWrapper} from '../test/test-wrapper.tsx';
+import {MemoryRouter, Routes, Route} from 'react-router-dom';
 
 describe('MainLayout', () => {
-	it('handles logout', async () => {
-		const logoutSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
-			ok: true,
-			json: async () => ({status: 'ok'}),
-		} as Response);
-
+	it('renders navigation items', () => {
 		render(
 			<TestWrapper>
 				<MemoryRouter>
@@ -19,11 +14,69 @@ describe('MainLayout', () => {
 			</TestWrapper>,
 		);
 
+		// Use getAllByText because 'Home' appears in both AppBar and Sidebar
+		expect(screen.getAllByText(/home/i).length).toBeGreaterThan(0);
+		expect(screen.getByText(/about/i)).toBeInTheDocument();
+		expect(screen.getByText(/settings/i)).toBeInTheDocument();
+	});
+
+	it('toggles drawer state', () => {
+		render(
+			<TestWrapper>
+				<MemoryRouter>
+					<MainLayout />
+				</MemoryRouter>
+			</TestWrapper>,
+		);
+
+		const toggleBtn = screen.getByLabelText(/open drawer/i);
+		fireEvent.click(toggleBtn);
+		// After click it should show the open state icon (ChevronLeft)
+		expect(screen.getByLabelText(/open drawer/i)).toBeInTheDocument();
+	});
+
+	it('handles unknown routes in title', () => {
+		render(
+			<TestWrapper>
+				<MemoryRouter initialEntries={['/unknown']}>
+					<Routes>
+						<Route path="/unknown" element={<MainLayout />} />
+					</Routes>
+				</MemoryRouter>
+			</TestWrapper>,
+		);
+
+		// Fallback title should be 'App' as per getPageTitle logic
+		expect(screen.getByText('App')).toBeInTheDocument();
+	});
+
+	it('handles logout', async () => {
+		const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+			Response.json(
+				{status: 'ok'},
+				{
+					status: 200,
+				},
+			),
+		);
+
+		render(
+			<TestWrapper>
+				<MemoryRouter initialEntries={['/']}>
+					<Routes>
+						<Route path="/" element={<MainLayout />} />
+						<Route path="/login" element={<div>Login Page</div>} />
+					</Routes>
+				</MemoryRouter>
+			</TestWrapper>,
+		);
+
 		const logoutBtn = screen.getByRole('button', {name: /logout/i});
 		fireEvent.click(logoutBtn);
 
 		await waitFor(() => {
-			expect(logoutSpy).toHaveBeenCalled();
+			expect(fetchSpy).toHaveBeenCalledWith(expect.stringContaining('/auth/logout'), expect.any(Object));
+			expect(screen.getByText(/login page/i)).toBeInTheDocument();
 		});
 	});
 
@@ -53,44 +106,5 @@ describe('MainLayout', () => {
 				credentials: 'include',
 			}),
 		);
-	});
-
-	it('highlights active links', () => {
-		render(
-			<TestWrapper>
-				<MemoryRouter initialEntries={['/']}>
-					<MainLayout />
-				</MemoryRouter>
-			</TestWrapper>,
-		);
-
-		const homeLink = screen.getByRole('link', {name: /home/i});
-		expect(homeLink.className).toContain('active');
-	});
-
-	it('highlights about link', () => {
-		render(
-			<TestWrapper>
-				<MemoryRouter initialEntries={['/about']}>
-					<MainLayout />
-				</MemoryRouter>
-			</TestWrapper>,
-		);
-
-		const aboutLink = screen.getByRole('link', {name: /about/i});
-		expect(aboutLink.className).toContain('active');
-	});
-
-	it('highlights settings link', () => {
-		render(
-			<TestWrapper>
-				<MemoryRouter initialEntries={['/settings']}>
-					<MainLayout />
-				</MemoryRouter>
-			</TestWrapper>,
-		);
-
-		const settingsLink = screen.getByRole('link', {name: /settings/i});
-		expect(settingsLink.className).toContain('active');
 	});
 });

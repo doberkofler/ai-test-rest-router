@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useMemo} from 'react';
 import {ThemeProvider as MuiThemeProvider, createTheme, CssBaseline, useMediaQuery} from '@mui/material';
-import {useTheme} from '@client/hooks/use-theme.ts';
+import {useTheme} from '../hooks/use-theme.ts';
 import type {ReactNode} from 'react';
 
 type ThemeContextType = {
@@ -80,8 +80,11 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
 // eslint-disable-next-line react-refresh/only-export-components
 export const useThemeContext = () => {
 	const context = useContext(ThemeContext);
+	/* v8 ignore start */
+	// WHY: Defensive type guard for context usage; technically unreachable if used correctly within the application tree.
 	if (context === undefined) {
 		throw new Error('useThemeContext must be used within a ThemeProvider');
 	}
+	/* v8 ignore stop */
 	return context;
 };

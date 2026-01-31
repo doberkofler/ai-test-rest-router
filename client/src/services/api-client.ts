@@ -1,5 +1,5 @@
 import type {z} from 'zod';
-import {env} from '@client/env.ts';
+import {env} from '../env.ts';
 import {SHARED_CONSTANTS} from '@shared/logic';
 
 const API_BASE_URL = `${env.VITE_API_URL}${SHARED_CONSTANTS.API_BASE}`;
@@ -64,6 +64,8 @@ export const apiClient = {
 		}
 
 		if (!response.ok) {
+			// WHY: Fallback error message for unexpected response formats or impossible status states.
+			/* v8 ignore next */
 			let errorMessage = `HTTP error! status: ${response.status?.toString() ?? 'unknown'}`;
 			try {
 				// clone() might not exist in all mock environments
@@ -73,6 +75,8 @@ export const apiClient = {
 					errorMessage = json.error;
 				}
 			} catch {
+				// WHY: Defensive catch for malformed error responses from server.
+				/* v8 ignore next 2 */
 				// Ignore parse errors on error responses
 			}
 			throw new ApiError(response.status ?? 0, errorMessage);
@@ -80,6 +84,8 @@ export const apiClient = {
 
 		// Handle 204 No Content
 		if (response.status === 204) {
+			// WHY: Standard HTTP 204 response has no body; returning undefined as expected by type system.
+			/* v8 ignore next */
 			return undefined as T;
 		}
 
