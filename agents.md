@@ -87,6 +87,10 @@ Always keep this file updated when the project changes.
 - **Vite Proxy**: In development, Vite is configured to proxy `/api` requests to the backend server (port 3000). This bypasses CORS issues during local development.
 - **Server CORS**: The backend maintains a generalized CORS configuration as a fallback for non-proxied or cross-origin requests.
 
+### 9. CI/CD
+- **GitHub Actions**: A CI workflow is configured in `.github/workflows/ci.yml` which runs `npm run ci` on every push and pull request to the `main` branch.
+- **Environment**: CI runs on Node 24 and includes Playwright browser installation.
+
 ---
 
 ## 🔍 Validation Protocol
