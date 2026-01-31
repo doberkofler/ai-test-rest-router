@@ -6,24 +6,27 @@ Always keep this file updated when the project changes.
 
 ### Root Workspace (NPM Workspaces)
 - **Install All**: `npm install`
-- **CI**: `npm run ci` (lint, format:check, test, build, test:e2e)
+- **CI**: `npm run ci` (lint, format:check, test, test:coverage, build, test:e2e)
 - **Lint All**: `npm run lint` (runs `eslint .` from root)
 - **Format Check**: `npm run format:check` (runs `prettier --check .`)
 - **Build All**: `npm run build` (builds all workspaces)
 - **Test All**: `npm run test` (runs tests in all workspaces)
+- **Coverage All**: `npm run test:coverage` (enforces 85% coverage threshold)
 - **E2E Tests**: `npm run test:e2e`
 
 ### Frontend (client/)
 - **Dev Server**: `npm run dev -w client`
 - **Build**: `npm run build -w client`
 - **Test**: `npm run test -w client`
+- **Coverage**: `npm run test:coverage -w client`
 - **Single Test**: `cd client && npx vitest run src/pages/login-page.test.tsx`
 
 ### Backend (server/)
 - **Dev**: `npm run dev -w server`
 - **Start**: `npm run start -w server`
 - **Test**: `npm run test -w server`
-- **Single Test**: `cd server && node --test src/auth.test.ts`
+- **Coverage**: `npm run test:coverage -w server`
+- **Single Test**: `cd server && npx vitest run src/auth.test.ts`
 
 ### Shared (@shared/logic)
 - **Lint**: handled by root lint.

@@ -11,10 +11,11 @@
 		"lint": "npm run lint --workspaces",
 		"format:check": "prettier --check .",
 		"test": "npm run test --workspaces",
+		"test:coverage": "npm run test:coverage --workspaces",
 		"test:e2e": "playwright test",
 		"test:e2e:ui": "playwright test --ui",
 		"test:e2e:report": "playwright show-report",
-		"ci": "npm run lint && npm run format:check && npm run test && npm run build && npm run test:e2e"
+		"ci": "npm run lint && npm run format:check && npm run test && npm run test:coverage && npm run build && npm run test:e2e"
 	},
 	"dependencies": {
 		"zod": "^4.3.6"

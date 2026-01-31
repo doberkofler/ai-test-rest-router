@@ -5,7 +5,8 @@
 	"scripts": {
 		"dev": "node --watch src/index.ts",
 		"start": "node src/index.ts",
-		"test": "node --test src/**/*.test.ts",
+		"test": "vitest run",
+		"test:coverage": "vitest run --coverage",
 		"build": "true",
 		"lint": "tsc --noEmit && eslint src"
 	},

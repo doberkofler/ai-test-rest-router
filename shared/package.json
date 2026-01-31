@@ -9,6 +9,7 @@
 	"scripts": {
 		"build": "true",
 		"test": "true",
+		"test:coverage": "true",
 		"lint": "eslint ."
 	},
 	"peerDependencies": {

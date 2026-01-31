@@ -8,7 +8,8 @@
 		"build": "tsc -b && vite build",
 		"lint": "tsc -p tsconfig.app.json && eslint .",
 		"preview": "vite preview",
-		"test": "vitest run"
+		"test": "vitest run",
+		"test:coverage": "vitest run --coverage"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
