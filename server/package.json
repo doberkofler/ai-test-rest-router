@@ -6,6 +6,7 @@
 		"dev": "node --watch src/index.ts",
 		"start": "node src/index.ts",
 		"test": "node --test src/**/*.test.ts",
+		"build": "true",
 		"lint": "tsc --noEmit && eslint src"
 	},
 	"dependencies": {
@@ -23,7 +24,7 @@
 		"@types/express": "^5.0.6",
 		"@types/morgan": "^1.9.10",
 		"@types/supertest": "^6.0.3",
-		"@vitest/browser": "^4.0.18",
+		"@vitest/browser-playwright": "^4.0.18",
 		"@vitest/coverage-v8": "^4.0.18",
 		"@vitest/eslint-plugin": "^1.6.6",
 		"supertest": "^7.2.2"

@@ -1,8 +1,12 @@
+
+
 **/.DS_Store
 **/*.log
 **/node_modules/
 **/coverage/
 **/__screenshots__/
-playwright-report/
-test-results/
-.vscode/
+**/playwright-report/
+**/test-results/
+**/.vscode/
+**/tsconfig*.tsbuildinfo
+

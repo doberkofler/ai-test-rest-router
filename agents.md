@@ -1,10 +1,15 @@
 # AI Development Guidelines - Test REST Router
 
+Always keep this file updated when the project changes.
+
 ## 🛠 Build, Lint, & Test Commands
 
 ### Root Workspace (NPM Workspaces)
 - **Install All**: `npm install`
+- **CI**: `npm run ci` (lint, format:check, test, build, test:e2e)
 - **Lint All**: `npm run lint` (runs `eslint .` from root)
+- **Format Check**: `npm run format:check` (runs `prettier --check .`)
+- **Build All**: `npm run build` (builds all workspaces)
 - **Test All**: `npm run test` (runs tests in all workspaces)
 - **E2E Tests**: `npm run test:e2e`
 
@@ -23,8 +28,6 @@
 ### Shared (@shared/logic)
 - **Lint**: handled by root lint.
 - **Tests**: `npm run test -w shared` (placeholder)
-
----
 
 ## 📐 Code Style & Conventions
 
@@ -75,9 +78,14 @@
 - **Session**: Memory-based `SessionService` with background cleanup.
 
 ### 7. Testing
-- **Unit/Integration**: Vitest (client), Node Native Runner (server).
+- **Unit/Integration**: Vitest 4 (client), Node Native Runner (server).
+- **Browser Mode**: Client tests use `@vitest/browser-playwright` and run headless by default.
 - **E2E**: Playwright (in `e2e/` directory).
 - **Quality**: Ensure at least 90% test coverage for new features.
+
+### 8. Infrastructure & Proxy
+- **Vite Proxy**: In development, Vite is configured to proxy `/api` requests to the backend server (port 3000). This bypasses CORS issues during local development.
+- **Server CORS**: The backend maintains a generalized CORS configuration as a fallback for non-proxied or cross-origin requests.
 
 ---
 

@@ -50,7 +50,10 @@ export const MainLayout: React.FC = () => {
 				navigate('/login');
 			})
 			.catch((error: unknown) => {
-				console.error('Logout failed', error);
+				// WHY: Suppress logging in tests to avoid cluttering test output with expected failures.
+				if (import.meta.env.MODE !== 'test') {
+					console.error('Logout failed', error);
+				}
 				logout();
 				navigate('/login');
 			});

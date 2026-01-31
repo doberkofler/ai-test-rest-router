@@ -15,6 +15,7 @@ export default tseslint.config(
 		ignores: [
 			'**/dist/**',
 			'**/node_modules/**',
+			'**/coverage/**',
 			'eslint.config.js',
 			'**/vite.config.ts',
 			'server/vitest.config.ts',

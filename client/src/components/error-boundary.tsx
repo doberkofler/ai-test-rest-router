@@ -25,7 +25,10 @@ export class ErrorBoundary extends Component<Props, State> {
 	}
 
 	public override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-		console.error('Uncaught error:', error, errorInfo);
+		// WHY: Suppress logging in tests to avoid cluttering test output.
+		if (import.meta.env.MODE !== 'test') {
+			console.error('Uncaught error:', error, errorInfo);
+		}
 	}
 
 	public override render() {

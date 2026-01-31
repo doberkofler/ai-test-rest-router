@@ -1,14 +1,14 @@
 import {test, expect} from '@playwright/test';
 
 test.describe('Authentication Flow', () => {
-	test('should login successfully and navigate through the app', async ({page}) => {
+	test('should login successfully and navigate through app', async ({page}) => {
 		// Start at login page
 		await page.goto('/login');
-		
+
 		// Perform login with correct credentials from users.json
 		await page.locator('#username').fill('admin');
-		await page.locator('#password').fill('most-secret');
-		
+		await page.locator('#password').fill('secret');
+
 		const signInButton = page.locator('button:has-text("Sign In")');
 		await signInButton.click();
 

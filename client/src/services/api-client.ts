@@ -46,6 +46,20 @@ export const apiClient = {
 			response = await fetch(url, defaultOptions);
 		} catch (error: unknown) {
 			const message = error instanceof Error ? error.message : 'Network error';
+
+			// WHY: Suppress verbose logging in tests to avoid cluttering test output with expected failures.
+			if (import.meta.env.MODE !== 'test') {
+				console.error(`API Request Failed: ${options.method ?? 'GET'} ${url}`, {
+					error,
+					message,
+					cause: error instanceof Error ? error.cause : undefined,
+				});
+			}
+
+			// Provide more specific feedback for common failure modes
+			if (message.includes('Failed to fetch')) {
+				throw new ApiError(0, 'Network error: Connection refused or CORS block. Check if server is running on port 3000.');
+			}
 			throw new ApiError(0, message);
 		}
 

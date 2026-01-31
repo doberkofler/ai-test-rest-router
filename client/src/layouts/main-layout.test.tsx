@@ -44,6 +44,15 @@ describe('MainLayout', () => {
 		await waitFor(() => {
 			expect(logoutSpy).toHaveBeenCalled();
 		});
+
+		// Instead of console.error, just verify the spy was called
+		expect(logoutSpy).toHaveBeenCalledWith(
+			expect.stringContaining('/auth/logout'),
+			expect.objectContaining({
+				method: 'POST',
+				credentials: 'include',
+			}),
+		);
 	});
 
 	it('highlights active links', () => {

@@ -7,11 +7,14 @@
 		"shared"
 	],
 	"scripts": {
+		"build": "npm run build --workspaces",
 		"lint": "npm run lint --workspaces",
+		"format:check": "prettier --check .",
 		"test": "npm run test --workspaces",
 		"test:e2e": "playwright test",
 		"test:e2e:ui": "playwright test --ui",
-		"test:e2e:report": "playwright show-report"
+		"test:e2e:report": "playwright show-report",
+		"ci": "npm run lint && npm run format:check && npm run test && npm run build && npm run test:e2e"
 	},
 	"dependencies": {
 		"zod": "^4.3.6"
@@ -34,7 +37,7 @@
 		"prettier": "^3.8.1",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.54.0",
-		"vitest": "^2.1.9"
+		"vitest": "^4.0.18"
 	},
 	"overrides": {
 		"zod": "$zod",

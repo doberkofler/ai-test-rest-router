@@ -191,7 +191,7 @@ describe('SettingsPage', () => {
 
 		const input = await screen.findByLabelText(/session timeout/i);
 		fireEvent.change(input, {target: {value: 'abc'}});
-		
+
 		const saveBtn = await screen.findByRole('button', {name: /save settings/i});
 		fireEvent.click(saveBtn);
 

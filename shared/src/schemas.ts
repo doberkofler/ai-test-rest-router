@@ -53,10 +53,7 @@ export const HealthResponseSchema = z.object({
  * Environment validation schemas
  */
 export const ServerEnvSchema = z.object({
-	PORT: z
-		.string()
-		.default(String(SHARED_CONSTANTS.DEFAULT_PORT))
-		.transform(Number),
+	PORT: z.string().default(String(SHARED_CONSTANTS.DEFAULT_PORT)).transform(Number),
 	NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 });
 

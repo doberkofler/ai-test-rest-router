@@ -56,7 +56,9 @@ describe('Modular Server API - Detailed', () => {
 
 	it(`GET ${API_BASE}/info handles invalid session`, async () => {
 		const app = await createApp();
-		const response = await request(app).get(`${API_BASE}/info`).set('Cookie', [`${COOKIE_NAME}=invalid-id`]);
+		const response = await request(app)
+			.get(`${API_BASE}/info`)
+			.set('Cookie', [`${COOKIE_NAME}=invalid-id`]);
 		expect(response.status).toBe(401);
 	});
 
